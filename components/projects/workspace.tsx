@@ -1,0 +1,47 @@
+'use client';
+import { useEffect, useState } from 'react';
+import Link from 'next/link';
+import { Badge, Card, PageHeader } from '@/components/shared';
+import { convictionLevels, narrativeOptions, projectStatuses, projectSchema, type ResearchProject } from '@/lib/projects';
+import { useProjects } from './store';
+import { buttonClass, Field, inputClass } from './fields';
+import { ProjectLiveData } from './live-data';
+const tabs = ['Overview', 'Research', 'Markets & Liquidity', 'Capital & Tokenomics', 'News & Catalysts'] as const;
+export function ProjectWorkspace({ id }: { id: string }) {
+  const store = useProjects(); const project = store.projects.find(p => p.id === id);
+  if (!store.ready) return <p className="text-muted-foreground">Loading research…</p>;
+  if (!project) return <Card className="p-8"><h1 className="text-xl font-semibold">Project not found in this browser</h1><p className="my-3 text-muted-foreground">Create a project or import your research backup to open it here.</p>{store.error && <p role="alert">{store.error}</p>}<Link href="/projects" className="text-primary hover:underline">Back to projects →</Link></Card>;
+  return <Editor key={id} project={project} />;
+}
+function Editor({ project }: { project: ResearchProject }) {
+  const store = useProjects(); const [draft, setDraft] = useState(project); const [tab, setTab] = useState<typeof tabs[number]>('Overview'); const [saved, setSaved] = useState(project); const [message, setMessage] = useState('');
+  const dirty = JSON.stringify(draft) !== JSON.stringify(saved);
+  useEffect(() => {
+    const prevent = (e: BeforeUnloadEvent) => { if (dirty) { e.preventDefault(); e.returnValue = ''; } };
+    const guardLink = (e: MouseEvent) => { const anchor = (e.target as HTMLElement).closest('a'); if (dirty && anchor && !anchor.target && !window.confirm('Leave without saving your research changes?')) e.preventDefault(); };
+    window.addEventListener('beforeunload', prevent); document.addEventListener('click', guardLink, true);
+    return () => { window.removeEventListener('beforeunload', prevent); document.removeEventListener('click', guardLink, true); };
+  }, [dirty]);
+  function update<K extends keyof ResearchProject>(key: K, value: ResearchProject[K]) { setDraft(d => ({ ...d, [key]: value })); setMessage(''); }
+  function save() {
+    const next = { ...draft, updatedAt: new Date().toISOString() };
+    if (!projectSchema.safeParse(next).success) { setMessage('Check the project name and data IDs. Use a CoinGecko slug and a chain ID without spaces; use the exact token address.'); return; }
+    if (project.updatedAt !== saved.updatedAt) { setMessage('This project changed in another tab. Export your work or reload before saving over the newer version.'); return; }
+    if (store.save(next)) { setDraft(next); setSaved(next); setMessage('Research saved in this browser.'); }
+  }
+  const note = (key: 'summary' | 'thesis' | 'risks' | 'catalysts' | 'invalidation' | 'fundamentals' | 'capital' | 'notes', title: string, placeholder: string, rows = 5) => <Field label={title}><textarea className={`${inputClass} resize-y leading-relaxed`} rows={rows} maxLength={20000} value={draft[key]} onChange={e => update(key, e.target.value)} placeholder={placeholder} /></Field>;
+  return <div className="space-y-6">
+    <Link href="/projects" className="text-sm text-muted-foreground hover:text-foreground">← All projects</Link>
+    <PageHeader title={saved.name} description={`${saved.symbol || 'No ticker'} · Your project research workspace`}><Badge variant="outline">{saved.status}</Badge><button className={`${buttonClass} bg-primary text-primary-foreground`} disabled={!dirty || !draft.name.trim() || !!store.error} onClick={save}>Save research</button></PageHeader>
+    <div className="flex flex-wrap items-center justify-between gap-3 text-xs text-muted-foreground"><span>Manual research · saved in this browser · {dirty ? 'Unsaved changes' : `Last saved ${new Date(saved.updatedAt).toLocaleString()}`}</span><button className="hover:underline" onClick={store.exportFile}>Export saved research</button></div>
+    {(message || store.error) && <p role="status" className="rounded border border-primary/30 bg-primary/10 p-3 text-sm">{store.error || message}</p>}
+    <div className="flex gap-1 overflow-x-auto border-b" role="tablist" aria-label="Project sections">{tabs.map(t => <button key={t} role="tab" aria-selected={tab === t} id={`tab-${t.split(' ')[0]}`} aria-controls="project-panel" className={`whitespace-nowrap border-b-2 px-4 py-3 text-sm ${tab === t ? 'border-primary text-foreground' : 'border-transparent text-muted-foreground hover:text-foreground'}`} onClick={() => setTab(t)}>{t}</button>)}</div>
+    <div role="tabpanel" id="project-panel" aria-labelledby={`tab-${tab.split(' ')[0]}`}>
+    {tab === 'Overview' && <div className="grid gap-5 lg:grid-cols-[1.6fr_1fr]"><Card className="space-y-5 p-5"><h2 className="font-semibold">Project identity</h2><div className="grid gap-4 sm:grid-cols-2"><Field label="Project name"><input className={inputClass} required maxLength={100} value={draft.name} onChange={e => update('name', e.target.value)} /></Field><Field label="Ticker"><input className={inputClass} maxLength={20} value={draft.symbol} onChange={e => update('symbol', e.target.value)} /></Field></div>{note('summary', 'What does this project do?', 'Describe its product, users and why it matters.', 4)}<div><h3 className="mb-3 text-sm text-muted-foreground">Narratives · select all that apply</h3><div className="flex flex-wrap gap-2">{Array.from(new Set([...narrativeOptions, ...draft.narratives])).map(n => <button key={n} aria-pressed={draft.narratives.includes(n)} className={`rounded-full border px-3 py-1.5 text-xs ${draft.narratives.includes(n) ? 'border-primary bg-primary/15 text-foreground' : 'text-muted-foreground hover:bg-secondary'}`} onClick={() => update('narratives', draft.narratives.includes(n) ? draft.narratives.filter(x => x !== n) : [...draft.narratives, n])}>{n}</button>)}</div></div></Card><div className="space-y-5"><Card className="space-y-4 p-5"><h2 className="font-semibold">Your decision</h2><Field label="Research status"><select className={inputClass} value={draft.status} onChange={e => update('status', e.target.value as ResearchProject['status'])}>{projectStatuses.map(s => <option key={s}>{s}</option>)}</select></Field><Field label="Conviction"><select className={inputClass} value={draft.conviction} onChange={e => update('conviction', e.target.value as ResearchProject['conviction'])}>{convictionLevels.map(s => <option key={s}>{s}</option>)}</select></Field><p className="text-xs text-muted-foreground">Your assessment, not an automated recommendation.</p></Card><Card className="space-y-4 p-5"><h2 className="font-semibold">Connect market data</h2><Field label="CoinGecko ID"><input className={inputClass} placeholder="e.g. bitcoin" maxLength={100} value={draft.coingeckoId} onChange={e => update('coingeckoId', e.target.value.toLowerCase())} /></Field><Field label="DEX chain ID"><input className={inputClass} placeholder="e.g. ethereum or solana" maxLength={100} value={draft.chainId} onChange={e => update('chainId', e.target.value.toLowerCase())} /></Field><Field label="Token contract address"><input className={`${inputClass} font-mono`} maxLength={128} value={draft.address} onChange={e => update('address', e.target.value.trim())} /></Field><p className="text-xs text-muted-foreground">Confirm the exact asset ID and contract before loading data. A ticker alone does not identify a token.</p></Card></div></div>}
+    {tab === 'Research' && <div className="grid gap-5 lg:grid-cols-2"><Card className="space-y-5 p-5">{note('thesis', 'Investment thesis', 'Why could this succeed? What is your edge?')}{note('fundamentals', 'Fundamentals & evidence', 'Team, product, adoption, utility, competition. Include source links and dates.')}</Card><Card className="space-y-5 p-5">{note('risks', 'Key risks', 'What can go wrong? Which assumptions remain unverified?')}{note('invalidation', 'What would change your mind?', 'Write specific evidence or conditions that invalidate the thesis.')}{note('notes', 'Research notes', 'Questions, links and next actions.', 4)}</Card></div>}
+    {tab === 'Markets & Liquidity' && <ProjectLiveData project={saved} />}
+    {tab === 'Capital & Tokenomics' && <Card className="space-y-5 p-5"><h2 className="font-semibold">Capital structure</h2><p className="text-sm text-muted-foreground">Funding, investor, sale-price and unlock feeds are planned. Record verified research here while those sources are connected.</p>{note('capital', 'Funding, investors, token sales & unlocks', 'Round and date · amount raised · investors · sale price · vesting/unlocks · supply. Include source links, dates and any uncertainty.', 12)}<Link href="/data-sources" className="inline-block text-sm text-primary hover:underline">See planned data sources →</Link></Card>}
+    {tab === 'News & Catalysts' && <Card className="space-y-5 p-5"><h2 className="font-semibold">What could change the story?</h2><p className="text-sm text-muted-foreground">Project news and calendar feeds are not connected yet. Keep upcoming catalysts and source links here.</p>{note('catalysts', 'Catalysts & events to monitor', 'Launches, upgrades, exchange listings, unlock dates, partnerships. Record a source and date for each.', 12)}</Card>}
+    </div>
+  </div>;
+}

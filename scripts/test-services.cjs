@@ -12,3 +12,5 @@ require.extensions['.ts'] = (module, filename) => {
   module._compile(result.outputText, filename);
 };
 require('../tests/services.test.ts');
+
+require('../tests/projects.test.ts');

@@ -1,6 +1,6 @@
 # Atlas service foundation
 
-The existing Bolt UI, routes, mock data, and styling remain unchanged. New GET routes under `/api/data/` provide an opt-in path to live data. Pages still display demo data until a separate UI migration explicitly connects them.
+The service foundation exposes GET routes under `/api/data/`. The Projects workspace now calls market, exchange and DEX services on demand; Data Sources reads provider status. Remaining Bolt pages are explicitly marked as design previews. See [Research workspace](RESEARCH-WORKSPACE.md) for browser storage, navigation and migration details.
 
 ## Boundaries
 

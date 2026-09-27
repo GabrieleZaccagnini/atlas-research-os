@@ -1,6 +1,6 @@
 # Atlas data API
 
-All routes are GET, server-side, dynamic, read-only, with `Cache-Control: no-store` for browser responses. Provider caching is handled inside the service layer. The Bolt UI does not call these routes yet.
+All routes are GET, server-side, dynamic, read-only, with `Cache-Control: no-store` for browser responses. Provider caching is handled inside the service layer. The Projects Markets & Liquidity panel calls these routes on demand, and Data Sources reads status. Legacy preview pages still use example data.
 
 | Route | Input | Result |
 |---|---|---|
