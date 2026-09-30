@@ -25,7 +25,9 @@ test('missing key and disabled providers make no requests, status contains no se
   const r = new ProviderRuntime(c, fetcher(async () => { throw Error('should never fetch'); }));
   assert.equal((await r.query('coingecko', 'global', {}, 1, x => x)).ok, false);
   assert.equal((await r.query('dexscreener', 'x', {}, 1, x => x)).ok, false);
-  assert.deepEqual(r.status().map(s => s.state), ['missing_key', 'disabled', 'idle']);
+  assert.equal(r.status().find(s => s.id === 'coingecko')?.state, 'missing_key');
+  assert.equal(r.status().find(s => s.id === 'dexscreener')?.state, 'disabled');
+  assert.ok(r.status().filter(s => !['coingecko', 'dexscreener'].includes(s.id)).every(s => s.state === 'idle'));
   assert.ok(!JSON.stringify(new ProviderRuntime(config()).status()).includes('test-secret'));
 });
 test('deduplicates in-flight requests and uses canonical fresh cache', async () => {

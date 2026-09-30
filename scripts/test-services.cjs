@@ -14,3 +14,21 @@ require.extensions['.ts'] = (module, filename) => {
 require('../tests/services.test.ts');
 
 require('../tests/projects.test.ts');
+
+require('../tests/cloud-projects.test.ts');
+
+require('../tests/morning-desk.test.ts');
+
+require('../tests/dashboard.test.ts');
+
+require('../tests/provider-expansion.test.ts');
+
+require('../tests/market-columns.test.ts');
+
+require('../tests/discovery.test.ts');
+
+require('../tests/watchlists.test.ts');
+
+require('../tests/discovery-views.test.ts');
+
+require('../tests/scrapbook.test.ts');

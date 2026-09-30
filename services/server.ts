@@ -1,4 +1,8 @@
 import 'server-only';
+import { createDiscoveryService } from './discovery';
+import { coinMarketCap, preferredGlobal } from './market/coinmarketcap';
+import { intelligenceAdapters } from './intelligence/adapters';
+import { coinPaprikaMarket, coinPaprikaId } from './market/coinpaprika';
 import { readConfig } from './core/config';
 import { ProviderRuntime } from './core/runtime';
 import { createMarketService } from './market';
@@ -11,7 +15,9 @@ import { createDefiService } from './defi';
 import { defiLlama } from './defi/defillama';
 function createServices() {
   const runtime = new ProviderRuntime(readConfig(process.env));
-  return { market: createMarketService(coinGeckoMarket(runtime)), exchanges: createExchangeService(coinGeckoExchanges(runtime)),
+  const cmc = coinMarketCap(runtime);
+  const discovery = coinPaprikaMarket(runtime);
+  return { cmc, discoveryLists: createDiscoveryService(runtime), globalOverview: () => preferredGlobal(cmc.global, discovery.global), intelligence: intelligenceAdapters(runtime), discovery, publicMarket: createMarketService(discovery, coinPaprikaId), market: createMarketService(coinGeckoMarket(runtime)), exchanges: createExchangeService(coinGeckoExchanges(runtime)),
     dex: createDexService(dexScreener(runtime)), defi: createDefiService(defiLlama(runtime)), status: () => runtime.status() };
 }
 // Process-local only; separate instances/serverless workers have separate caches and status.

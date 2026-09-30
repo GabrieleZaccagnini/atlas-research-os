@@ -1,0 +1,29 @@
+'use client';
+import { useState } from 'react';
+import type { ResearchProject } from '@/lib/projects';
+import { displayDay, localDay, calendarDate, catalystSchema } from '@/lib/research-routine';
+import { Calendar } from '@/components/ui/calendar';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { CalendarDays } from 'lucide-react';
+import { Card } from '@/components/shared';
+import { buttonClass, Field, inputClass } from './fields';
+function ResearchDate({ label, value, onChange }: { label: string; value: string; onChange: (value: string) => void }) {
+  const [open, setOpen] = useState(false);
+  const selected = value && calendarDate.safeParse(value).success ? new Date(`${value}T12:00:00`) : undefined;
+  return <div className="space-y-2"><div className="flex items-end gap-2"><Field label={label}><input className={inputClass} value={value} maxLength={10} placeholder="YYYY-MM-DD" onChange={e => onChange(e.target.value)} /></Field><Popover open={open} onOpenChange={setOpen}><PopoverTrigger asChild><button type="button" className={buttonClass} aria-label={`Choose ${label.toLowerCase()}`}><CalendarDays size={18} /></button></PopoverTrigger><PopoverContent className="w-auto p-0" align="end"><Calendar mode="single" selected={selected} defaultMonth={selected} onSelect={day => { onChange(day ? localDay(day) : ''); setOpen(false); }} initialFocus /></PopoverContent></Popover></div><p className="text-xs text-muted-foreground">Year-month-day, or choose from the calendar.</p></div>;
+}
+export type CatalystDraft = { title: string; date: string; url: string };
+export function ReviewEditor({ project, note, setNote, onChange, onLog }: { project: ResearchProject; note: string; setNote: (note: string) => void; onChange: (review: ResearchProject['review']) => void; onLog: (note: string) => Promise<boolean> }) {
+  return <Card className="space-y-4 p-5"><h2 className="font-semibold">Next research action</h2><Field label="Next action"><input maxLength={1000} className={inputClass} value={project.review.nextAction} onChange={e => onChange({ ...project.review, nextAction: e.target.value })} placeholder="What do you want to investigate next?" /></Field><ResearchDate label="Next review date" value={project.review.nextReviewOn} onChange={value => onChange({ ...project.review, nextReviewOn: value })} /><Field label="Today's review note"><textarea className={inputClass} rows={4} maxLength={5000} value={note} onChange={e => setNote(e.target.value)} placeholder="What changed? Does your thesis still hold? What evidence do you need?" /></Field><button className={buttonClass} disabled={!note.trim()} onClick={async () => { if (await onLog(note.trim())) setNote(''); }}>Save research &amp; log review</button><p className="text-xs text-muted-foreground">Saves all project edits and a dated review. Latest 100 reviews retained per project; export regularly.</p>{project.review.entries.slice(0, 3).map(entry => <div className="border-t pt-3 text-sm" key={entry.id}><p className="text-xs text-muted-foreground">{new Date(entry.recordedAt).toLocaleString()}</p><p className="mt-1 whitespace-pre-wrap">{entry.note}</p>{entry.nextReviewOn && <p className="mt-1 text-xs text-muted-foreground">Next review: {displayDay(entry.nextReviewOn)}</p>}</div>)}</Card>;
+}
+export function CatalystEditor({ events, draft, setDraft, onChange }: { events: ResearchProject['events']; draft: CatalystDraft; setDraft: (draft: CatalystDraft) => void; onChange: (events: ResearchProject['events']) => void }) {
+  const { title, date, url } = draft;
+  const [error, setError] = useState('');
+  function add() {
+    const result = catalystSchema.safeParse({ id: crypto.randomUUID(), title, date, sourceUrl: url, notes: '' });
+    if (!result.success) { setError(result.error.issues[0].message); return; }
+    if (events.length >= 100) { setError('This project already has 100 events. Remove an old entry before adding another.'); return; }
+    onChange([...events, result.data]); setDraft({ title: '', date: '', url: '' }); setError('');
+  }
+  return <Card className="space-y-4 p-5"><h2 className="font-semibold">Dated catalysts</h2><p className="text-sm text-muted-foreground">Your research entries, not a verified event feed. Dates are calendar days; confirm timing at the source.</p><div className="grid gap-3 sm:grid-cols-2"><Field label="Event title"><input className={inputClass} maxLength={200} value={title} onChange={e => setDraft({ ...draft, title: e.target.value })} placeholder="Upgrade, unlock, launch…" /></Field><ResearchDate label="Event date" value={date} onChange={value => setDraft({ ...draft, date: value })} /></div><Field label="Event source URL"><input className={inputClass} value={url} maxLength={2000} onChange={e => setDraft({ ...draft, url: e.target.value })} placeholder="https://…" /></Field><button className={buttonClass} disabled={!title.trim() || !date} onClick={add}>Add event to draft</button>{error && <p role="alert" className="text-sm text-warning">{error}</p>}{events.slice().sort((a, b) => a.date.localeCompare(b.date)).map(event => <div className="flex items-start justify-between gap-3 border-t pt-3 text-sm" key={event.id}><div><p className="font-medium">{event.title}</p><p className="text-xs text-muted-foreground">{displayDay(event.date)} · {event.sourceUrl ? 'Source attached; verify details' : 'No source yet'}</p>{event.sourceUrl && <a className="text-xs text-primary" target="_blank" rel="noreferrer" href={event.sourceUrl}>Open source ↗</a>}</div><button className="text-xs text-muted-foreground hover:text-destructive" onClick={() => onChange(events.filter(e => e.id !== event.id))}>Remove from draft</button></div>)}<p className="text-xs text-muted-foreground">Save research to publish these changes to your calendar.</p></Card>;
+}

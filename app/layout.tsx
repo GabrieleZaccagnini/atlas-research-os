@@ -2,6 +2,7 @@ import './globals.css';
 import type { Metadata } from 'next';
 import { Inter, JetBrains_Mono } from 'next/font/google';
 import { AppShell } from '@/components/layout/app-shell';
+import { ThemeProvider } from '@/components/layout/theme-provider';
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-sans' });
 const jetbrainsMono = JetBrains_Mono({ subsets: ['latin'], variable: '--font-mono' });
@@ -28,9 +29,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className="dark">
+    <html lang="en" suppressHydrationWarning>
       <body className={`${inter.variable} ${jetbrainsMono.variable} font-sans`}>
-        <AppShell>{children}</AppShell>
+        <ThemeProvider><AppShell>{children}</AppShell></ThemeProvider>
       </body>
     </html>
   );

@@ -1,20 +1,29 @@
 export const navigation = [
-  { label: 'Research', items: [
-    { label: 'Daily Dashboard', href: '/', icon: 'LayoutDashboard', preview: true },
-    { label: 'Projects', href: '/projects', icon: 'FileSearch' },
-    { label: 'Buy List', href: '/buy-list', icon: 'Target' },
+  { label: 'Markets', items: [
+    { label: 'Dashboard', href: '/', icon: 'LayoutDashboard' },
+    { label: 'Crypto Markets', href: '/markets', icon: 'BarChart3' },
+    { label: 'Portfolio', href: '/portfolio', icon: 'Wallet' },
     { label: 'Watchlists', href: '/watchlists', icon: 'Eye' },
-    { label: 'Narratives', href: '/narratives', icon: 'Brain', preview: true },
   ] },
   { label: 'Intelligence', items: [
-    { label: 'Market Cycle', href: '/market-cycle', icon: 'Repeat', preview: true },
-    { label: 'Macro & Markets', href: '/macro', icon: 'Globe', preview: true },
-    { label: 'News', href: '/news', icon: 'Newspaper', preview: true },
-    { label: 'Calendar', href: '/calendar', icon: 'CalendarDays', preview: true },
+    { label: 'Macro & Markets', href: '/macro', icon: 'Globe' },
+    { label: 'Market Structure', href: '/market-cycle', icon: 'Repeat' },
+    { label: 'Chains & Liquidity', href: '/chains', icon: 'Layers' },
+    { label: 'News', href: '/news', icon: 'Newspaper' },
+    { label: 'Calendar', href: '/calendar', icon: 'CalendarDays' },
+    { label: 'Narratives', href: '/narratives', icon: 'Brain', preview: true },
+  ] },
+  { label: 'Research', items: [
+    { label: 'Charts', href: '/charts', icon: 'CandlestickChart' },
+    { label: 'Research Desk', href: '/research', icon: 'FileSearch' },
+    { label: 'Projects', href: '/projects', icon: 'Database' },
+    { label: 'Research Library', href: '/library', icon: 'Bookmark' },
+    { label: 'Buy List', href: '/buy-list', icon: 'Target' },
+    { label: 'Convictions', href: '/convictions', icon: 'BadgeCheck', preview: true },
+    { label: 'Journal', href: '/journal', icon: 'BookOpen' },
   ] },
   { label: 'Workspace', items: [
-    { label: 'Convictions', href: '/convictions', icon: 'Target', preview: true },
-    { label: 'Journal', href: '/journal', icon: 'BookOpen', preview: true },
-    { label: 'Data Sources', href: '/data-sources', icon: 'Settings' },
+    { label: 'Account & Storage', href: '/account', icon: 'Settings' },
+    { label: 'Data Sources', href: '/data-sources', icon: 'Database' },
   ] },
 ];

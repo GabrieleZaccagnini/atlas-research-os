@@ -1,2 +1,2 @@
-import { ProjectDirectory } from '@/components/projects/directory';
-export default function WatchlistsPage() { return <ProjectDirectory initialStatus="Watching" />; }
+import { WatchlistsWorkspace } from '@/components/watchlists/workspace';
+export default function WatchlistsPage() { return <WatchlistsWorkspace />; }

@@ -1,37 +1,68 @@
-# Atlas Roadmap
+# Atlas build roadmap
 
-## Sprint 0
-- [x] Initial Bolt prototype
-- [x] GitHub repository
-- [x] Local development environment
-- [x] VS Code setup
+Updated 2026-09-29. This is the delivery order for the [master product plan](MASTER-PLAN.md), replacing the original Bolt-era sprint list. It is a sequence of usable releases, not a dated promise. [BACKLOG.md](BACKLOG.md) owns feature status; [PLANNING.md](PLANNING.md) explains how to change the plan.
 
-## Sprint 1
-Narrative Intelligence
+## Current position
 
-## Sprint 2
-Project Research
+The homepage is now an anytime market dashboard. The Research Desk retains the earlier research workflow. Live-source slices cover market quotes/movers, selected US macro observations, headlines, sentiment/search attention, chain TVL, stablecoins, covered venue volume and revenue. Manual position snapshots extend saved projects with version 4 backups that accept versions 1–3. Wider global macro, derivatives, X and RWA coverage remain planned.
 
-## Sprint 3
-Decision Engine
+**Latest batch:** CMC top-100 Discovery/token reference details, global totals/sentiment/altseason, Cointelegraph/ECB RSS, and FRED inflation/jobs/real-yield/energy observations now extend the compact dashboard and detail pages. **Next outcome:** table columns/ranges and named browser-local lists are delivered. The user prioritized saved posts, articles and screenshots, so a browser-local Research Library and per-project Library tab now precede token-page/chart-plan refinement. Cloud attachment sync remains separate; choose one calendar/news or macro observation slice from actual use. Recent scope is retained in MASTER-PLAN §19 and PROVIDER-RESEARCH.md alongside the rate/PCE and ecosystem/beta-board requirements. Do not activate every candidate API at once.
 
-## Sprint 4
-Research Journal
+## Release sequence
 
-## Sprint 5
-Macro Intelligence
+| Milestone | Usable outcome | First slice and expansion | Exit evidence |
+| --- | --- | --- | --- |
+| M0 — Trust the foundation | Saved research and provider facts can be identified, explained and recovered | Verify existing save/reload; canonical project/token/network IDs; common evidence, missing-data and freshness model; export compatibility. Shared jobs/cache follow when scheduled ingestion needs them. | Browser save/reload and conflict handling verified; ambiguous identities stay unresolved; provider failure preserves research; existing exports still import. |
+| M1 — Project research workspace | Research one token end to end | Clear overview, existing team/funding/tokenomics forms, source drawer, coverage gaps; one metadata adapter after access checks; typed organization connections; basic project comparison. | A user can research representative projects, inspect sources, correct a fact without losing manual work, and compare like-for-like fields. Missing fields remain visible. |
+| M2 — Daily research desk | Know what changed and what needs attention | Dashboard from saved projects and available market snapshots; research queue, watchlist changes, next-review dates, narrative grouping and manually sourced catalysts; simple decision notes and saved evidence. | Every card opens its underlying project/event/evidence. Useful empty state with no projects; no preview numbers presented as live. The user can complete a daily review. |
+| M3 — Macro and policy workspace | Understand rates, liquidity, stress and upcoming events | Selected-country policy rates, US yields/real yields, inflation, VIX and dollar context; major-economy money composite; economic/political/trade event records; historical cycle scenarios. Expand to growth/jobs, credit, commodities and wider country coverage. | Units, instruments, release dates and revisions are visible; money components align in time/currency; confirmed policy and possible market impact remain separate. Missing series do not produce a regime conclusion. |
+| M4 — Chain capital and trading access | See where assets sit and where they can actually trade | Chain TVL history, stablecoins and the first chain fees/revenue comparison; existing token venue/pool views; RWA classes and issuer/access records; then selected CEX order books and size-specific liquidity estimates. | Comparable chain metrics with no invented combined total; chain revenue distinct from app revenue and net profit; access restrictions and unknowns visible; order-book coverage and execution estimates distinguished from reported pool value. |
+| M5 — Connected research intelligence | Evaluate adoption, funding, economics, narratives and risk together | Funding/unlocks, protocol economics/value capture, organization reverse views, developer activity, news/events, security and regulation; explainable narrative and rotation comparisons. Deliver one feature at a time. | Each insight links to dated evidence, methodology and coverage; provider claims can be corrected; observations, interpretations and personal conviction are distinct. |
+| M6 — Decisions and strategy lab | Record decisions and test ideas reproducibly | Expand journal/thesis history and holdings ledger; historical candles, initial signal module, realistic backtest and paper-forward record; taken/skipped comparison and scenario tools. | A saved strategy reproduces results on a named dataset/configuration; no look-ahead; costs and missing coverage are disclosed. Portfolio figures reconcile to transactions. |
+| M7 — Personal assistance and alerts | Reduce repeated research work | Cited AI dossier summaries and thesis challenges, scrapbook extraction, saved views and selectively enabled alerts. Structured strategy parsing follows validated strategy contracts. | AI cites retrievable evidence and leaves edits reviewable; alerts deduplicate and explain their trigger; users control cadence and cost. No automatic trade execution. |
+| M8 — Specialist expansion | Add capabilities whose value is demonstrated through use | Premium data, deeper wallet/derivatives coverage, modeled liquidation context, corporate treasury analytics, advanced yield/spread tools and relationship graphs. | A specific research need, verified access/terms and measurable improvement justify each addition. |
 
-## Sprint 6
-Market Cycle Analysis
+M3 and M4 can be reordered based on actual use after the foundation and daily research path work. A narrow journal, event or manual research feature need not wait for its entire specialist module. No milestone requires integrating every candidate provider. The complete 31-section scope remains in the master plan and backlog even when its first slice is small.
 
-## Sprint 7
-AI Research Assistant
+## Next implementation batch
 
-## Sprint 8
-Convictions & Watchlists
+The user's request for a usable morning workflow moved a narrow M2 slice forward (D-009). ATLAS-006/007/010/012/013/015/037 now have working partial implementations; this does not complete their broader requirements.
 
-## Sprint 9
-Live Data APIs
+1. Cross-provider Discovery is delivered as D-018, following columns/ranges (D-017). Named browser-local watchlists and explicit provider mappings are delivered as D-019 (ATLAS-003/013). The first saved-evidence library slice is delivered as D-021, and the exact-ID CMC token page is delivered as D-022. Next build editable saved chart plans or choose one verified calendar slice; cloud list sync remains separate. Saved Discovery starting views are delivered as D-020; column reordering and cloud preferences remain separate. CMC 4h/12h historical access still needs a configured key and live verification. CMC/RSS/FRED expansion is D-015 and CMC top-100/reference metadata is D-016. Wider rates, ecosystems/beta, mindshare and additional commodities remain planned.
+2. Verify signed-in browser save/reload/export (ATLAS-001) without performing the deferred transfer.
+3. Complete canonical project/network/token identity and evidence conventions (ATLAS-003/004), preserving existing explicit provider mappings and version 4 backups (legacy versions 1–3 remain accepted).
+4. Deliver typed institutional connections and comparison (ATLAS-009/011), then choose the first macro or chain-capital/revenue slice from actual research needs.
 
-## Sprint 10
-Alerts & Automation
+## How each slice is built
+
+1. Specify the question the screen answers, a small acceptance checklist and representative missing/error cases.
+2. Define identity, units, provenance and the domain contract before adding a provider.
+3. Verify access and choose one primary source for the needed fields. Reuse an existing adapter when it fits.
+4. Add the adapter/storage change and UI together so the slice is useful end to end.
+5. Test meaningful calculations, data isolation and compatibility; inspect the real interaction and unavailable/stale states. Run applicable repository checks.
+6. Update backlog status and source coverage, record any material decision, and commit a coherent reviewed change. Commit and push/deploy are separate actions; this plan does not perform them.
+
+Before modifying existing work, inspect the current uncommitted changes and preserve them. A feature is not shipped just because its types, page shell or provider catalog entry exist.
+
+## Architecture that allows expansion
+
+`Screen → domain service → normalized records → provider adapter → upstream source`
+
+Use separate domain services for projects/organizations, markets/liquidity, chains/RWA, macro/policy, news/events, research/portfolio and strategy. These are logical modules in the existing application, not a requirement to deploy separate microservices.
+
+- Keep identity mappings and evidence conventions shared across domains.
+- Keep provider responses behind adapters so a provider can change without redesigning screens.
+- Treat user research, sourced observations and calculated insights as distinct records.
+- Make UI sections reusable; compose dashboard summaries from the same data as detail pages.
+- Validate and version import/storage schemas; migrate existing records before requiring new fields.
+- Introduce persistent snapshots, scheduled refresh and shared quotas when the feature needs them. Fast-changing prices and slowly changing team records should not share a refresh schedule.
+- Avoid full-provider fan-out on page load. Support partial results, on-demand detail, cached snapshots and independent failures.
+
+The current implementation and its process-local limitations are documented in [ARCHITECTURE.md](ARCHITECTURE.md). New relationships/events can begin as validated structured records; introduce indexed relational tables and time-series storage when the required queries/history justify them.
+
+
+### Cross-provider Discovery validation — 2026-09-29 (D-018)
+
+70 automated checks, TypeScript, lint, production build and whitespace checks pass. Three live local API feeds succeed without new credentials: CoinGecko trending (15 rows), CMC recent additions (50 rows) and CoinPaprika five-day additions (60 rows at verification). Paid CMC most-visited returns typed disabled/503; fixture checks verify all six unavailable combinations make zero external ranking requests, even with keys configured. Decoders preserve exact identities, zero/null values, independent errors, bounds/cache behavior and provider trend order. CoinPaprika validation accepts unrelated historical Unicode directory entries but rejects unsafe selected addition IDs.
+
+Browser checks cover provider/mode switches, Paprika Show more (20 to 40 of 60), feed search, search reset on source change, CMC descending listing dates and asset metadata navigation outside the top 100. The existing reference page explicitly has no quote outside its top-100 snapshot; the additions feed's quote is not silently reused there. Dashboard shows five trend rows. At 390px the controls and long-name/price rows fit, with document width/scroll width both 390. No browser error logs were observed; temporary viewport override was reset. Existing saved research and positions were not edited. Build retains existing Supabase dependency, Browserslist and metadataBase warnings. No paid signup, subscription, commit, push or deployment. Named watchlists, canonical source overlap and numeric CMC sentiment/mindshare remain separate work.

@@ -1,4 +1,4 @@
-export type ProviderId = 'coingecko' | 'dexscreener' | 'defillama';
+export type ProviderId = 'coingecko' | 'dexscreener' | 'defillama' | 'coinpaprika' | 'fred' | 'alternative' | 'llama-stablecoins' | 'coindesk' | 'federalreserve' | 'coingecko-public' | 'coinmarketcap' | 'cointelegraph' | 'ecb';
 export type ErrorCode = 'disabled' | 'missing_key' | 'rate_limited' | 'timeout' | 'network' | 'upstream' | 'invalid_response' | 'invalid_input';
 export interface ServiceError { code: ErrorCode; message: string; retryAt?: string }
 export interface Provenance {
@@ -23,6 +23,7 @@ export interface ProviderStatus {
 export interface AssetIdentity {
   atlasId?: string;
   coingeckoId?: string;
+  coinpaprikaId?: string;
   coinmarketcapId?: number;
   contracts?: { chainId: string; address: string }[];
 }
@@ -31,10 +32,18 @@ export interface MarketQuote {
   price: number | null; marketCap: number | null; fdv: number | null;
   volume24h: number | null; rank: number | null;
   change24hPercent: number | null; change7dPercent: number | null;
+  change1hPercent?: number | null; change30dPercent?: number | null;
   circulatingSupply: number | null; totalSupply: number | null; maxSupply: number | null;
   sourceUpdatedAt: string | null;
 }
+export interface CmcPerformance {
+  anchorAt: string;
+  rows: { id: number; change4hPercent: number | null; change12hPercent: number | null;
+    observedAt: string | null; baseline4hAt: string | null; baseline12hAt: string | null }[];
+}
 export interface GlobalMarket {
+  marketCapChange24hPercent?: number | null; volumeChange24hPercent?: number | null;
+  derivativesVolume24h?: number | null;
   currency: 'USD'; marketCap: number | null; volume24h: number | null;
   btcDominancePercent: number | null; ethDominancePercent: number | null;
   sourceUpdatedAt: string | null;
@@ -68,4 +77,11 @@ export interface OrderBook {
   exchangeId: string; base: string; quote: string; sourceUpdatedAt: string;
   bids: [priceInQuote: number, baseAmount: number][];
   asks: [priceInQuote: number, baseAmount: number][];
+}
+
+// Reference enrichment is not a saved research record or proof of a relationship.
+export interface CmcProfile {
+  id: number; name: string; symbol: string; description: string;
+  listedAt: string | null; sourceUrl: string;
+  links: { label: string; url: string }[]; tags: string[];
 }

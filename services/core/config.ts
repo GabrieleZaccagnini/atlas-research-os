@@ -22,8 +22,18 @@ export function readConfig(env: Record<string, string | undefined>): ServiceConf
     staleMs: integer(env.ATLAS_STALE_TTL_MS, 300000, 0, 3600000),
     maxCacheEntries: integer(env.ATLAS_CACHE_MAX_ENTRIES, 250, 1, 2000),
     providers: {
+      coinmarketcap: { enabled: enabled(env.ATLAS_CMC_ENABLED), apiKey: env.CMC_API_KEY?.trim() || undefined, requiresKey: false, minIntervalMs: 1000 },
+      cointelegraph: { enabled: enabled(env.ATLAS_NEWS_ENABLED), requiresKey: false, minIntervalMs: 1000 },
+      ecb: { enabled: enabled(env.ATLAS_NEWS_ENABLED), requiresKey: false, minIntervalMs: 1000 },
       coingecko: { enabled: enabled(env.ATLAS_COINGECKO_ENABLED), apiKey: env.COINGECKO_DEMO_API_KEY?.trim() || undefined, requiresKey: true, minIntervalMs: 2500 },
       dexscreener: { enabled: enabled(env.ATLAS_DEXSCREENER_ENABLED), requiresKey: false, minIntervalMs: 300 },
+      coinpaprika: { enabled: enabled(env.ATLAS_COINPAPRIKA_ENABLED), requiresKey: false, minIntervalMs: 300 },
+      'coingecko-public': { enabled: enabled(env.ATLAS_COINGECKO_ENABLED), requiresKey: false, minIntervalMs: 2500 },
+      fred: { enabled: enabled(env.ATLAS_FRED_ENABLED), requiresKey: false, minIntervalMs: 250 },
+      alternative: { enabled: enabled(env.ATLAS_ALTERNATIVE_ENABLED), requiresKey: false, minIntervalMs: 1000 },
+      'llama-stablecoins': { enabled: enabled(env.ATLAS_DEFILLAMA_ENABLED), requiresKey: false, minIntervalMs: 1000 },
+      coindesk: { enabled: enabled(env.ATLAS_NEWS_ENABLED), requiresKey: false, minIntervalMs: 1000 },
+      federalreserve: { enabled: enabled(env.ATLAS_NEWS_ENABLED), requiresKey: false, minIntervalMs: 1000 },
       defillama: { enabled: enabled(env.ATLAS_DEFILLAMA_ENABLED), requiresKey: false, minIntervalMs: 1000 },
     },
   };

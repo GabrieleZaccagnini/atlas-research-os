@@ -13,6 +13,9 @@ import {
   CalendarDays,
   Sparkles,
   Settings,
+  Database,
+  BadgeCheck,
+  BarChart3, Wallet, Layers, CandlestickChart, Bookmark,
 } from 'lucide-react';
 
 export const navIconMap: Record<string, React.ComponentType<{ className?: string }>> = {
@@ -28,4 +31,7 @@ export const navIconMap: Record<string, React.ComponentType<{ className?: string
   CalendarDays,
   Sparkles,
   Settings,
+  Database,
+  BadgeCheck,
+  BarChart3, Wallet, Layers, CandlestickChart, Bookmark,
 };

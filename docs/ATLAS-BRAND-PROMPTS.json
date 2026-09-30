@@ -1,0 +1,26 @@
+[
+  {
+    "step": "atlasPromptBoard",
+    "prompt": "Use case: logo-brand. Create a polished starter brand identity board for ATLAS, a premium crypto research and market intelligence workspace. Landscape composition on flat obsidian #0B0B0C with generous editorial whitespace. Hero horizontal logo top half: a distinctive minimal geometric letter A supporting a clean orbital arc/world, tiny cyan signal star at upper right; sturdy silhouette, precise flat vector-like geometry, no literal muscular man. Purple #7C3AED to indigo #6366F1 symbol, restrained cyan #00F0FF signal accent. Beside symbol exact uppercase wordmark \"ATLAS\" in refined widely tracked geometric sans lettering, ice white #F8FAFC. Under hero exact tagline \"Map the Market. Find the Signal. Build Conviction.\" Bottom third organized into clean small specimen panels showing the SAME standalone symbol, the SAME wordmark alone, a monochrome white symbol, and a compact palette row with exact labels \"#0B0B0C\" \"#131316\" \"#7C3AED\" \"#6366F1\" \"#00F0FF\" \"#F8FAFC\". Refined institutional research brand, confident and calm. No mock devices, no charts, no coins, no bitcoin logos, no 3D, no glow, no gradients in background, no watermark. This is a branding presentation, not an app UI. Consistency of symbol across all specimens is critical."
+  },
+  {
+    "step": "atlasPromptBoardRefine",
+    "prompt": "Edit the supplied Atlas branding board. Preserve the layout, exact ATLAS lettering, tagline, palette labels, and orbital A with cyan star. REMOVE ALL bloom, glow, haze, shadows, lighting effects entirely throughout the image. Absolutely flat solid obsidian #0B0B0C background. Crisp flat vector-style artwork with sharp clean edges. Purple-indigo logo and white wordmark must be sharply readable, no luminous haze. Bottom labels in readable muted light gray. This is a clean professional brand standards sheet. No other changes."
+  },
+  {
+    "step": "atlasPromptLockup",
+    "prompt": "Using the supplied Atlas brand sheet as the exact identity reference, extract ONLY the primary horizontal logo: orbital purple-indigo A symbol with small cyan four-point star on left and exact white ATLAS wordmark on right. Preserve its exact shapes and proportions. No tagline, no board, no palette, no labels. Center with modest even padding in a wide landscape image. Actual transparent background with alpha, not a checkerboard painted into the image. Crisp flat artwork, no glow, no shadows, no texture."
+  },
+  {
+    "step": "atlasPromptLockupFinal",
+    "prompt": "Repair this logo asset to pristine production quality. Preserve orbital A icon with cyan star and white ATLAS wording. Every letter must have perfectly clean edges and completely solid white fill, with no distressed marks, erosion, flecks or scratches. Render on a solid flat #0B0B0C background, NOT transparent. Tight landscape composition with logo filling 80 percent width. Flat clean geometric brand artwork. No glow, no shadows, no texture. Only the icon and ATLAS."
+  },
+  {
+    "step": "atlasPromptSymbol",
+    "prompt": "From the reference logo create a square standalone Atlas app symbol: retain ONLY the same purple-indigo orbital A and cyan four-point star, remove all ATLAS lettering. Center symbol at 72 percent of square width on solid obsidian #0B0B0C. Preserve symbol geometry. Flat crisp edges and solid fills, no texture, no glow, no shadows, no other text or graphics."
+  },
+  {
+    "step": "atlasPromptWordmark",
+    "prompt": "Use the horizontal Atlas logo reference for lettering only. Produce standalone wordmark \"ATLAS\" with the same geometric white lettering: triangular open A shapes, wide tracking, precisely aligned baseline, clean T L S. Remove symbol/star/orbit. Only text ATLAS centered across 80 percent width on flat solid #0B0B0C dark background. Wide landscape 3:1 composition. No glow, no shadows, no texture, no labels, no tagline. Solid white clean letter fills."
+  }
+]

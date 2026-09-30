@@ -10,9 +10,9 @@ export function PageHeader({
   children?: React.ReactNode;
 }) {
   return (
-    <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+    <div className="mb-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
       <div>
-        <h1 className="text-xl font-bold tracking-tight text-foreground">{title}</h1>
+        <h1 className="text-xl font-semibold tracking-tight text-foreground">{title}</h1>
         {description && (
           <p className="mt-1 text-sm text-muted-foreground">{description}</p>
         )}
@@ -30,7 +30,7 @@ export function Card({
   return (
     <div
       className={cn(
-        'rounded-lg border border-border bg-card shadow-sm',
+        'atlas-card rounded-2xl border border-border/60 bg-card shadow-[0_2px_8px_-4px_rgba(0,0,0,0.35)]',
         className
       )}
       {...props}
@@ -52,7 +52,7 @@ export function CardHeader({
   className?: string;
 }) {
   return (
-    <div className={cn('flex items-start justify-between border-b border-border px-5 py-4', className)}>
+    <div className={cn('flex items-start justify-between gap-3 px-4 pb-3 pt-4', className)}>
       <div>
         <h3 className="text-sm font-semibold text-foreground">{title}</h3>
         {description && <p className="mt-0.5 text-xs text-muted-foreground">{description}</p>}
@@ -63,7 +63,7 @@ export function CardHeader({
 }
 
 export function CardBody({ className, children }: { className?: string; children: React.ReactNode }) {
-  return <div className={cn('p-5', className)}>{children}</div>;
+  return <div className={cn('px-4 pb-4 pt-1', className)}>{children}</div>;
 }
 
 export function StatCard({
@@ -80,20 +80,20 @@ export function StatCard({
   icon?: React.ReactNode;
 }) {
   return (
-    <Card className="p-5">
+    <Card className="h-full min-w-0 p-4">
       <div className="flex items-center justify-between">
-        <span className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
+        <span className="text-[11px] font-medium text-muted-foreground">
           {label}
         </span>
-        {icon && <div className="text-muted-foreground/50">{icon}</div>}
+        {icon && <div className="flex h-7 w-7 items-center justify-center rounded-full bg-secondary text-muted-foreground">{icon}</div>}
       </div>
-      <div className="mt-3 flex items-baseline gap-2">
-        <span className="font-mono text-2xl font-bold text-foreground">{value}</span>
+      <div className="mt-2.5 flex flex-wrap items-baseline gap-x-2 gap-y-1">
+        <span className="text-[23px] font-semibold tracking-tight tabular-nums text-foreground">{value}</span>
         {change !== undefined && (
           <span
             className={cn(
-              'font-mono text-sm font-medium',
-              change > 0 ? 'text-success' : change < 0 ? 'text-destructive' : 'text-muted-foreground'
+              'rounded-full px-1.5 py-0.5 text-[10px] font-medium tabular-nums',
+              change > 0 ? 'bg-success/10 text-success' : change < 0 ? 'bg-destructive/10 text-destructive' : 'bg-secondary text-muted-foreground'
             )}
           >
             {change > 0 ? '+' : ''}
@@ -101,7 +101,7 @@ export function StatCard({
           </span>
         )}
       </div>
-      {sublabel && <p className="mt-1 text-xs text-muted-foreground">{sublabel}</p>}
+      {sublabel && <p className="mt-1.5 text-[10px] leading-relaxed text-muted-foreground">{sublabel}</p>}
     </Card>
   );
 }
@@ -126,7 +126,7 @@ export function Badge({
   return (
     <span
       className={cn(
-        'inline-flex items-center rounded px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider',
+        'inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider',
         variants[variant],
         className
       )}

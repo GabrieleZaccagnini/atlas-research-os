@@ -1,5 +1,7 @@
 # Atlas Features
 
+This early feature summary is supporting context. See [MASTER-PLAN.md](MASTER-PLAN.md) for complete scope and [BACKLOG.md](BACKLOG.md) for current status; use [ROADMAP.md](ROADMAP.md) for build order.
+
 ## Narrative Intelligence
 Track and score emerging crypto narratives before they become mainstream.
 
