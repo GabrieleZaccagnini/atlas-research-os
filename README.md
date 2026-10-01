@@ -124,9 +124,9 @@ See [Data Sources](docs/DATA-SOURCES.md) for detailed coverage and [Provider Res
 
 ## Tech stack
 
-Next.js 13 App Router, React 18, TypeScript, Tailwind CSS, Radix/shadcn-style components, Lucide icons, Recharts, Zod and a server-side provider runtime. Optional Supabase supports authentication and private project documents. Tests use Node's test runner and the installed TypeScript compiler.
+Next.js 15 App Router, React 19, TypeScript, Tailwind CSS, Radix/shadcn-style components, Lucide icons, Recharts, Zod and a server-side provider runtime. Optional Supabase supports authentication and private project documents. Tests use Node's test runner and the installed TypeScript compiler.
 
-The dependency baseline still needs security upgrades before an internet-facing deployment. Existing functionality and successful local checks do not establish production hardening.
+The dependency baseline was refreshed on 2026-10-01 and the locked dependency tree passed `npm audit` with zero known vulnerabilities at that time. Recheck advisories before deployment; passing dependency and local checks does not establish production hardening. See [Dependency Maintenance](docs/DEPENDENCY-MAINTENANCE.md).
 
 ## Run locally
 

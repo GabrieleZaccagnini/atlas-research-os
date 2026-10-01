@@ -10,16 +10,14 @@ const jetbrainsMono = JetBrains_Mono({ subsets: ['latin'], variable: '--font-mon
 export const metadata: Metadata = {
   title: 'Atlas — Crypto Research & Investment OS',
   description:
-    'Map the market. Find the signal. Build conviction. Institutional-grade crypto research and investment operating system.',
+    'A personal workspace for researching crypto markets and developing investment theses.',
   openGraph: {
     title: 'Atlas — Crypto Research & Investment OS',
     description:
     'Map the market. Find the signal. Build conviction.',
-    images: [{ url: 'https://bolt.new/static/og_default.png' }],
   },
   twitter: {
-    card: 'summary_large_image',
-    images: [{ url: 'https://bolt.new/static/og_default.png' }],
+    card: 'summary',
   },
 };
 

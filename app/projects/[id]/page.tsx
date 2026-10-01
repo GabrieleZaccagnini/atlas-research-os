@@ -1,2 +1,5 @@
 import { ProjectWorkspace } from '@/components/projects/workspace';
-export default function ProjectPage({ params }: { params: { id: string } }) { return <ProjectWorkspace id={params.id} />; }
+export default async function ProjectPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
+  return <ProjectWorkspace id={id} />;
+}
