@@ -22,6 +22,11 @@ export function readConfig(env: Record<string, string | undefined>): ServiceConf
     staleMs: integer(env.ATLAS_STALE_TTL_MS, 300000, 0, 3600000),
     maxCacheEntries: integer(env.ATLAS_CACHE_MAX_ENTRIES, 250, 1, 2000),
     providers: {
+      binance: { enabled: enabled(env.ATLAS_BINANCE_ENABLED), requiresKey: false, minIntervalMs: 500 },
+      bea: { enabled: enabled(env.ATLAS_CALENDAR_ENABLED), requiresKey: false, minIntervalMs: 1000 },
+      'fomc-calendar': { enabled: enabled(env.ATLAS_CALENDAR_ENABLED), requiresKey: false, minIntervalMs: 1000 },
+      'fred-calendar': { enabled: enabled(env.ATLAS_CALENDAR_ENABLED), requiresKey: false, minIntervalMs: 0 },
+      coindar: { enabled: enabled(env.ATLAS_COINDAR_ENABLED ?? 'false'), apiKey: env.COINDAR_ACCESS_TOKEN?.trim() || undefined, requiresKey: true, minIntervalMs: 1000 },
       coinmarketcap: { enabled: enabled(env.ATLAS_CMC_ENABLED), apiKey: env.CMC_API_KEY?.trim() || undefined, requiresKey: false, minIntervalMs: 1000 },
       cointelegraph: { enabled: enabled(env.ATLAS_NEWS_ENABLED), requiresKey: false, minIntervalMs: 1000 },
       ecb: { enabled: enabled(env.ATLAS_NEWS_ENABLED), requiresKey: false, minIntervalMs: 1000 },

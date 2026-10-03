@@ -46,9 +46,11 @@ export const dataSourceMap = {
 } as const;
 export type ServiceDomain = keyof typeof dataSourceMap;
 export const implementedCapabilities = {
+  candles: 'Binance spot: seven explicit USDT pairs, closed 1h/4h/1d/1w candles, bounded 500-bar snapshots',
+  charts: 'Editable browser-local project chart plans with saved candles, indicators and drawing geometry; separate backup',
   market: 'CMC top-100/reference details and recent additions; CoinPaprika wider discovery/personal quotes and five-day additions; CoinGecko quotes (key required)', global: 'CMC global metrics with CoinPaprika fallback; CoinGecko available separately',
   projects: 'CMC on-demand reference metadata; CoinPaprika sourced profile snapshots', research: 'Private projects, reviews and research coverage',
-  calendar: 'User-recorded project catalysts', watchlists: 'Browser-local named lists, exact provider assets, notes/status, paste preview and separate backups; existing research watchlist',
+  calendar: 'Project catalysts; BEA/FOMC official schedules; selected BLS release dates mirrored by FRED; browser-local stars; Coindar pending', watchlists: 'Browser-local named lists, exact provider assets, notes/status, paste preview and separate backups; existing research watchlist',
   exchanges: 'CoinGecko paginated tickers', dex: 'DexScreener token pools',
   defi: 'DefiLlama chain/protocol TVL and covered venue volume', liquidity: 'returned-pool liquidity summary',
   sentiment: 'CMC Crypto Fear & Greed and Altcoin Season; separate Alternative.me Bitcoin index',

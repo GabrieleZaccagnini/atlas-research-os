@@ -17,6 +17,7 @@ export const navigation = [
     { label: 'Charts', href: '/charts', icon: 'CandlestickChart' },
     { label: 'Research Desk', href: '/research', icon: 'FileSearch' },
     { label: 'Projects', href: '/projects', icon: 'Database' },
+    { label: 'Upcoming Tokens', href: '/upcoming', icon: 'Sparkles' },
     { label: 'Research Library', href: '/library', icon: 'Bookmark' },
     { label: 'Buy List', href: '/buy-list', icon: 'Target' },
     { label: 'Convictions', href: '/convictions', icon: 'BadgeCheck', preview: true },

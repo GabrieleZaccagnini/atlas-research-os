@@ -32,3 +32,7 @@ require('../tests/watchlists.test.ts');
 require('../tests/discovery-views.test.ts');
 
 require('../tests/scrapbook.test.ts');
+
+require('../tests/chart-plans.test.ts');
+require('../tests/calendar.test.ts');
+require('../tests/bitcoin-cycle.test.ts');

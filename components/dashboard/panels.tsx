@@ -5,6 +5,7 @@ import { ArrowUpRight, ArrowUpDown, Filter, Plus, Search } from 'lucide-react';
 import { Area, AreaChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 import { Card } from '@/components/shared';
 import { useProjects } from '@/components/projects/store';
+import { useAuth } from '@/components/auth/provider';
 import { buttonClass, inputClass } from '@/components/projects/fields';
 import { WatchButton } from '@/components/watchlists/add-button';
 import { quoteWatchAsset } from '@/lib/watchlists';
@@ -15,6 +16,9 @@ import { monthlyChange } from '@/lib/macro';
 import { marketRows, filterMarketRows, marketAssetKey, marketAssetHref, savedMarketProject, portfolioRows, periodChange, marketMetrics, invalidRange, type MarketRange, type MarketView, type MarketSort } from '@/lib/market-dashboard';
 import { projectEvents } from '@/lib/research-desk';
 import { localDay, displayDay } from '@/lib/research-routine';
+import { calendarStarsStorageKey, parseCalendarStars, type CalendarStar } from '@/lib/calendar-stars';
+import { scheduledDate, scheduledUpcoming, sortedSchedule } from '@/lib/scheduled-calendar';
+import type { ScheduledCalendarEvent } from '@/services/calendar/types';
 import type { GlobalMarket, MarketQuote, CmcPerformance } from '@/services/core/types';
 import { macroSeries, type MacroId, type MacroSeries, type ChainSnapshot, type RevenueRow, type StablecoinSupply, type Sentiment, type NewsItem, type DexActivity, type SeriesPoint } from '@/services/intelligence/types';
 import { marketColumns, defaultMarketColumns, validMarketColumns, unavailableMarketColumns } from '@/lib/market-columns';
@@ -175,6 +179,51 @@ export function PersonalPanel({ quotes, portfolio = false, detailed = false }: {
   </Panel>;
 }
 export function CalendarPanel() {
-  const store = useProjects(); const today = localDay(); const events = projectEvents(store.projects).filter(e => e.event.date >= today).slice(0, 4);
-  return <Panel title="Upcoming events" href="/calendar" label="Saved catalysts"><div className="space-y-4 px-4 pb-4">{events.map(({ project, event }) => <Link key={`${project.id}:${event.id}`} href={`/projects/${project.id}`} className="block border-l-2 border-primary/60 pl-3"><p className="text-[10px] text-primary">{displayDay(event.date)}</p><p className="mt-1 text-xs">{event.title}</p><p className="mt-1 text-[10px] text-muted-foreground">{project.symbol || project.name}</p></Link>)}</div>{!events.length && <Empty>{store.ready ? 'No upcoming project events saved.' : 'Loading events…'}</Empty>}<div className="space-y-2 border-t border-border/40 px-4 py-3"><p className="text-[10px] text-muted-foreground">Economic calendars · external</p><a href="https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm" target="_blank" rel="noreferrer" className="block text-xs hover:text-primary">FOMC meetings ↗</a><a href="https://www.bls.gov/schedule/" target="_blank" rel="noreferrer" className="block text-xs hover:text-primary">US inflation & jobs ↗</a></div></Panel>;
+  const store = useProjects();
+  const auth = useAuth();
+  const starsKey = calendarStarsStorageKey(auth.session?.user.id ?? 'browser');
+  const [savedStars, setSavedStars] = useState<{ key: string; events: CalendarStar[]; error: boolean }>({ key: '', events: [], error: false });
+  useEffect(() => {
+    if (!auth.ready) return;
+    const reload = () => {
+      try { setSavedStars({ key: starsKey, events: parseCalendarStars(localStorage.getItem(starsKey)).events, error: false }); }
+      catch { setSavedStars({ key: starsKey, events: [], error: true }); }
+    };
+    reload();
+    const sync = (event: StorageEvent) => { if (event.key === starsKey || event.key === null) reload(); };
+    window.addEventListener('storage', sync);
+    return () => window.removeEventListener('storage', sync);
+  }, [auth.ready, starsKey]);
+  const bea = useFeed<ScheduledCalendarEvent[]>('/api/data/calendar?source=bea');
+  const fomc = useFeed<ScheduledCalendarEvent[]>('/api/data/calendar?source=fomc');
+  const bls = useFeed<ScheduledCalendarEvent[]>('/api/data/calendar?source=bls');
+  const today = localDay();
+  const projectCatalysts = projectEvents(store.projects);
+  const officialSchedule = [...(bea.data ?? []), ...(fomc.data ?? []), ...(bls.data ?? [])];
+  const officialById = new Map(officialSchedule.map(event => [event.id, event]));
+  const projectById = new Map(projectCatalysts.map(item => [`project:${item.project.id}:${item.event.id}`, item]));
+  const upcomingStars = savedStars.key === starsKey && !savedStars.error ? savedStars.events.map(star => {
+    const live = officialById.get(star.id);
+    const project = projectById.get(star.id);
+    return { star, title: live?.title ?? project?.event.title ?? star.title,
+      dateLabel: live ? scheduledDate(live) : project ? displayDay(project.event.date) : star.dateLabel,
+      untilDate: live?.date ?? project?.event.date ?? star.untilDate,
+      sortAt: live?.startsAt ?? (live ? `${live.date}T12:00:00Z` : project ? `${project.event.date}T12:00:00Z` : star.sortAt),
+      savedDate: !live && !project };
+  }).filter(item => item.untilDate >= today).sort((a, b) => a.sortAt.localeCompare(b.sortAt) || a.star.id.localeCompare(b.star.id)).slice(0, 5) : [];
+  const saved = projectCatalysts.filter(({ event }) => event.date >= today).slice(0, 2);
+  const official = sortedSchedule(officialSchedule).filter(event => scheduledUpcoming(event, Date.now())).slice(0, 3);
+  const unavailable = [bea, fomc, bls].every(feed => !feed.loading && !feed.data);
+  return <Panel title="Upcoming events" href="/calendar" label="Official + saved">
+    <div className="space-y-3 px-4 pb-4"><div className="flex items-center justify-between gap-2"><p className="text-[10px] uppercase tracking-wider text-muted-foreground">Your starred events</p><Link href="/calendar?view=starred" className="text-[10px] text-primary">Open watchlist →</Link></div>
+      {upcomingStars.map(({ star, title, dateLabel, savedDate }) => <Link key={star.id} href="/calendar?view=starred" className="block border-l-2 border-warning/60 pl-3 hover:text-primary"><p className="text-[10px] text-warning">{dateLabel} · {star.category === 'macro' ? 'Macro' : 'Crypto'}{savedDate ? ' · saved date; verify source' : ''}</p><p className="mt-1 text-xs">{title}</p>{star.note && <p className="mt-1 line-clamp-2 text-[10px] text-muted-foreground">{star.note}</p>}{star.projectId && <p className="mt-1 text-[10px] text-muted-foreground">{store.projects.find(project => project.id === star.projectId)?.name ?? 'Linked project unavailable'}</p>}</Link>)}
+      {!upcomingStars.length && <p className="text-xs text-muted-foreground">{savedStars.key === starsKey && savedStars.error ? 'Saved stars could not be loaded. Open the calendar to check your watchlist.' : 'Star calendar dates to keep them in your watchlist.'}</p>}
+    </div>
+    <div className="space-y-3 border-t border-border/40 px-4 py-3"><p className="text-[10px] uppercase tracking-wider text-muted-foreground">Economic & policy</p>
+      {official.map(event => <a key={event.id} href={event.sourceUrl} target="_blank" rel="noreferrer" className="block border-l-2 border-primary/60 pl-3 hover:text-primary"><p className="text-[10px] text-primary">{scheduledDate(event)} · {event.source === 'bea' ? 'BEA' : event.source === 'bls' ? 'BLS via FRED' : 'Fed'}</p><p className="mt-1 text-xs">{event.title}</p></a>)}
+      {!official.length && <p className="text-xs text-muted-foreground">{bea.loading || fomc.loading || bls.loading ? 'Loading official dates…' : unavailable ? 'Official schedules unavailable.' : 'No upcoming dates in the available schedules.'}</p>}
+    </div>
+    <div className="space-y-3 border-t border-border/40 px-4 py-3"><p className="text-[10px] uppercase tracking-wider text-muted-foreground">Your project catalysts</p>{saved.map(({ project, event }) => <Link key={`${project.id}:${event.id}`} href={`/projects/${project.id}`} className="block border-l-2 border-primary/40 pl-3"><p className="text-[10px] text-primary">{displayDay(event.date)}</p><p className="mt-1 text-xs">{event.title}</p><p className="mt-1 text-[10px] text-muted-foreground">{project.symbol || project.name}</p></Link>)}{!saved.length && <p className="text-xs text-muted-foreground">{store.ready ? 'No upcoming project events saved.' : 'Loading saved events…'}</p>}</div>
+    <div className="border-t border-border/40 px-4 py-3 text-[10px] text-muted-foreground">BLS dates via FRED; <a href="https://www.bls.gov/schedule/" target="_blank" rel="noreferrer" className="text-primary">verify with BLS ↗</a>{bls.result?.ok === false ? ' · Feed unavailable' : bls.result?.ok && bls.result.warning ? ' · Dates may be incomplete' : ''}</div>
+  </Panel>;
 }

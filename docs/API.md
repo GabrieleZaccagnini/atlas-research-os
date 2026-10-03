@@ -55,3 +55,16 @@ GET /api/data/cmc-performance accepts no arbitrary asset/time parameters. Withou
 ### Discovery feeds — D-018
 
 GET /api/data/discovery?source=coingecko|coinmarketcap|coinpaprika&kind=trending|most-visited|new. Defaults: coingecko/trending. Invalid enums return 400. Available combinations: coingecko/trending, coinmarketcap/new, coinpaprika/new. Other combinations return 503 with typed disabled/access reason and no external request. Successful ServiceResult data contains items and total; rows retain exact source IDs, safe links, optional rank/price/24h change/addedAt/active. Unknown fields are null. Fixed bounded requests use 15-minute runtime caching/coalescing/status. CoinGecko reuses the same cache as existing trending. No user-supplied URLs, arbitrary pagination or symbol joins.
+
+
+### `GET /api/data/candles` — D-023
+
+Required `market`: BTCUSDT / ETHUSDT / SOLUSDT / BNBUSDT / XRPUSDT / ADAUSDT / LINKUSDT. Required `interval`: 1h / 4h / 1d / 1w. Invalid values return 400 before any provider request. Returns the normal service envelope with a Binance spot / USDT dataset of up to 500 closed candles (open bar omitted), `time`/`closeTime` in Unix milliseconds, OHLC prices in USDT and base-asset volume. Fixed origin, 60-second cache and normal timeout/cooldown/status/stale behavior. No history pagination, arbitrary symbols, API key or trading access.
+
+### `GET /api/data/calendar` — D-024
+
+Required `source=bea|fomc|bls`; other values return 400. Each source returns its own service envelope and status, with scheduled events carrying source URL, Eastern calendar date and nullable exact UTC start. BEA includes selected GDP/PCE/trade releases with published times; FOMC includes meeting end dates without an inferred time. `bls` reads FRED's public BLS release calendars for CPI, Employment Situation, JOLTS and PPI in the current/next year. Times published in Central Time are converted to UTC and shown as Eastern/local in the UI. The BLS response may carry a partial-coverage warning; FRED is a mirror and direct BLS calendar access remains blocked from this host. No arbitrary URLs, consensus or actual values.
+
+### `GET /api/data/crypto-calendar` — D-025
+
+Returns the normal service envelope for the first page of upcoming Coindar events, at most 100 records within a requested 90-day window. No user-supplied URLs or filters. Events retain Coindar's coin ID, event-page link, date precision, date label and provider flags; month/quarter values are not exact timestamps. A 30-minute process-local cache and fixed origin apply. `ATLAS_COINDAR_ENABLED` defaults to false; a server-side `COINDAR_ACCESS_TOKEN` is also required. Until a token request for Atlas is approved and configured, the route returns disabled and makes no upstream request. A live Coindar response has not been verified.

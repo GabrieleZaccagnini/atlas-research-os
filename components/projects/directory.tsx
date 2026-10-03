@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { ArrowUpRight, Download, FolderOpen, Plus, Search, Upload } from 'lucide-react';
 import { Badge, Card, PageHeader } from '@/components/shared';
-import { filterProjects, narrativeOptions, newProject, projectStatuses } from '@/lib/projects';
+import { filterProjects, narrativeOptions, newProject, projectStatuses, upcomingTokenProjects } from '@/lib/projects';
 import { useProjects } from './store';
 import { AssetPicker } from './asset-picker';
 import { buttonClass, Field, inputClass } from './fields';
@@ -23,6 +23,7 @@ export function ProjectDirectory({ initialStatus = 'all', embedded = false }: { 
   const narratives = Array.from(new Set([...narrativeOptions, ...store.projects.flatMap(p => p.narratives)])).sort();
   return <div className="space-y-6">
     <DirectoryHeader title={initialStatus === 'Buy List' ? 'Buy List' : initialStatus === 'Watching' ? 'Watchlists' : 'Projects'} description="One research universe. Follow the projects that matter to you.">
+      {!embedded && <Link className={buttonClass} href="/upcoming">Upcoming tokens →</Link>}
       <button className={buttonClass} onClick={store.exportFile}><Download size={16} /> Export</button>
       <button className={buttonClass} onClick={() => file.current?.click()} disabled={!store.ready || store.busy}><Upload size={16} /> Import</button>
       <button className={`${buttonClass} bg-primary text-primary-foreground`} onClick={() => setAdding(!adding)} disabled={!store.ready || store.busy}><Plus size={16} /> Add project</button>
@@ -35,7 +36,7 @@ export function ProjectDirectory({ initialStatus = 'all', embedded = false }: { 
     }} />
     <div className="flex flex-wrap items-center justify-between gap-2 text-xs text-muted-foreground"><span>{store.mode === 'cloud' ? 'Saved to your private cloud workspace' : 'Saved in this browser'} · export regularly to keep a backup</span><Link className="text-primary hover:underline" href="/data-sources">View data coverage →</Link></div>
     {(store.error || notice) && <p role="status" className="rounded-lg border border-warning/30 bg-warning/10 p-3 text-sm">{store.error || notice}</p>}
-    {!embedded && <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">{[['Total projects', store.projects.length], ['Research queue', store.projects.filter(p => p.status === 'Research Queue').length], ['Buy list', store.projects.filter(p => p.status === 'Buy List').length], ['High conviction', store.projects.filter(p => p.conviction === 'High').length]].map(([label, value]) => <Card key={label} className="p-4"><p className="text-xs text-muted-foreground">{label}</p><p className="mt-2 text-2xl font-semibold">{value}</p></Card>)}</div>}
+    {!embedded && <div className="grid grid-cols-2 gap-3 lg:grid-cols-5">{[['Total projects', store.projects.length], ['Research queue', store.projects.filter(p => p.status === 'Research Queue').length], ['Upcoming tokens', upcomingTokenProjects(store.projects).length], ['Buy list', store.projects.filter(p => p.status === 'Buy List').length], ['High conviction', store.projects.filter(p => p.conviction === 'High').length]].map(([label, value]) => <Card key={label} className="p-4"><p className="text-xs text-muted-foreground">{label}</p><p className="mt-2 text-2xl font-semibold">{value}</p></Card>)}</div>}
     {adding && <Card className="space-y-5 p-5"><AssetPicker disabled={store.busy} onSelect={asset => { setName(asset.name); setSymbol(asset.symbol); setCoinpaprikaId(asset.asset.coinpaprikaId!); }} />{coinpaprikaId && <p className="text-xs text-muted-foreground">Selected asset: {coinpaprikaId} <button className="ml-2 text-primary" onClick={() => setCoinpaprikaId('')}>Clear mapping</button></p>}<form className="grid items-end gap-4 sm:grid-cols-[1fr_150px_auto]" onSubmit={async e => {
       e.preventDefault(); const existing = coinpaprikaId && store.projects.find(p => p.coinpaprikaId === coinpaprikaId); if (existing) { router.push(`/projects/${existing.id}`); return; } const project = { ...newProject(name, symbol), coinpaprikaId }; if (await store.save(project)) router.push(`/projects/${project.id}`);
     }}><Field label="Project name"><input autoFocus required maxLength={100} value={name} onChange={e => setName(e.target.value)} className={inputClass} placeholder="e.g. PEAQ" /></Field><Field label="Ticker"><input maxLength={20} value={symbol} onChange={e => setSymbol(e.target.value)} className={inputClass} placeholder="PEAQ" /></Field><button className={`${buttonClass} bg-primary text-primary-foreground`} disabled={!name.trim() || store.busy}>Create research entry</button></form></Card>}

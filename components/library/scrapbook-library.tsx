@@ -28,12 +28,6 @@ function Screenshot({ item }: { item: StoredScrapbookItem }) {
   // eslint-disable-next-line @next/next/no-img-element
   return <a href={url} target="_blank" rel="noopener noreferrer" aria-label={`Open screenshot: ${item.title}`}><img src={url} alt={item.title} className="max-h-72 w-full rounded-lg border border-border/50 bg-background object-contain" /></a>;
 }
-function downloadJson(content: string) {
-  const url = URL.createObjectURL(new Blob([content], { type: 'application/json' }));
-  const anchor = document.createElement('a');
-  anchor.href = url; anchor.download = `atlas-library-${new Date().toISOString().slice(0, 10)}.json`; anchor.click();
-  setTimeout(() => URL.revokeObjectURL(url), 1000);
-}
 export function ScrapbookLibrary({ projectId }: { projectId?: string }) {
   const auth = useAuth();
   const projects = useProjects();
@@ -43,6 +37,9 @@ export function ScrapbookLibrary({ projectId }: { projectId?: string }) {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
   const [notice, setNotice] = useState('');
+  const [backupUrl, setBackupUrl] = useState<string | null>(null);
+  useEffect(() => () => { if (backupUrl) URL.revokeObjectURL(backupUrl); }, [backupUrl]);
+  useEffect(() => { setBackupUrl(null); }, [scope]);
   const [kind, setKind] = useState<Kind>('link');
   const [topic, setTopic] = useState<Topic>('Crypto');
   const [title, setTitle] = useState('');
@@ -113,7 +110,7 @@ export function ScrapbookLibrary({ projectId }: { projectId?: string }) {
   }
   async function exportLibrary() {
     setBusy(true); setError(''); setNotice('');
-    try { downloadJson(await exportScrapbook(scope)); setNotice('Library backup downloaded, including screenshots.'); }
+    try { setBackupUrl(URL.createObjectURL(new Blob([await exportScrapbook(scope)], { type: 'application/json' }))); setNotice('Backup ready, including screenshots. Select Save backup file to download it.'); }
     catch (cause) { setError(cause instanceof Error ? cause.message : 'Library backup failed.'); }
     finally { setBusy(false); }
   }
@@ -141,6 +138,7 @@ export function ScrapbookLibrary({ projectId }: { projectId?: string }) {
     <Card className="space-y-3 p-4 text-xs text-muted-foreground">
       <p>This library is saved in this browser{auth.session ? ' for your signed-in account' : ''}. It does not sync across devices. Its screenshots are included in <strong className="text-foreground">Backup library</strong>, separately from project backups.</p>
       <div className="flex flex-wrap gap-2"><button type="button" className={buttonClass} disabled={!ready || busy} onClick={() => void exportLibrary()}><Download className="mr-1 inline h-3.5 w-3.5" />Backup library</button><label className={`${buttonClass} cursor-pointer`}><Upload className="mr-1 inline h-3.5 w-3.5" />Restore backup<input ref={importRef} type="file" accept="application/json,.json" className="sr-only" disabled={busy} onChange={event => void restore(event.target.files?.[0])} /></label></div>
+      {backupUrl && <a href={backupUrl} download={`atlas-library-${new Date().toISOString().slice(0, 10)}.json`} className="inline-block text-sm text-primary underline">Save backup file</a>}
     </Card>
     <Card className="p-5"><form ref={formRef} className="space-y-4" onSubmit={event => void save(event)} onPaste={event => {
       if (kind !== 'screenshot') return;

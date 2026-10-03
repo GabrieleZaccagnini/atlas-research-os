@@ -1,4 +1,8 @@
 import 'server-only';
+import { createCandleService } from './candles';
+import { createCalendarService } from './calendar/adapters';
+import { createBlsCalendarService } from './calendar/bls';
+import { createCoindarService } from './calendar/coindar';
 import { createDiscoveryService } from './discovery';
 import { coinMarketCap, preferredGlobal } from './market/coinmarketcap';
 import { intelligenceAdapters } from './intelligence/adapters';
@@ -17,7 +21,7 @@ function createServices() {
   const runtime = new ProviderRuntime(readConfig(process.env));
   const cmc = coinMarketCap(runtime);
   const discovery = coinPaprikaMarket(runtime);
-  return { cmc, discoveryLists: createDiscoveryService(runtime), globalOverview: () => preferredGlobal(cmc.global, discovery.global), intelligence: intelligenceAdapters(runtime), discovery, publicMarket: createMarketService(discovery, coinPaprikaId), market: createMarketService(coinGeckoMarket(runtime)), exchanges: createExchangeService(coinGeckoExchanges(runtime)),
+  return { candles: createCandleService(runtime), calendar: createCalendarService(runtime), blsCalendar: createBlsCalendarService(runtime), coindar: createCoindarService(runtime), cmc, discoveryLists: createDiscoveryService(runtime), globalOverview: () => preferredGlobal(cmc.global, discovery.global), intelligence: intelligenceAdapters(runtime), discovery, publicMarket: createMarketService(discovery, coinPaprikaId), market: createMarketService(coinGeckoMarket(runtime)), exchanges: createExchangeService(coinGeckoExchanges(runtime)),
     dex: createDexService(dexScreener(runtime)), defi: createDefiService(defiLlama(runtime)), status: () => runtime.status() };
 }
 // Process-local only; separate instances/serverless workers have separate caches and status.

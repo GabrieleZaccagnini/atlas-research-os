@@ -55,7 +55,7 @@ Each summary opens a deeper workspace using the same source contracts. Panels lo
 
 ### Projects and Research
 
-Directory, saved filters, watchlists, Buy List, quick project previews, full project pages and side-by-side comparison of 2–4 projects. Each project is a persistent research dossier, not just a ticker.
+Directory, saved filters, watchlists, Buy List, quick project previews, full project pages and side-by-side comparison of 2–4 projects. Each project is a persistent research dossier, not just a ticker. Capture potential pre-launch tokens as projects even when their ticker, contract and exact provider identity are unknown; keep the user's reason for interest, discovery source and any possible launch date separate from verified calendar events and developed investment thesis.
 
 ### Intelligence
 
@@ -553,6 +553,10 @@ User-selected X accounts may enter through a small official API budget or a veri
 
 Crypto calendar candidates: CoinMarketCal and Coindar. Macro calendar candidates: official agency/central-bank release schedules, Finnhub, EODHD and Trading Economics. Qveris, Shibui, FindMyMoat, Medium and Datarade are discovery references; verify the original provider. Events need timezone, reference period, scheduled/released/revised state, importance/source, and actual/prior/consensus only when available. Official release dates alone do not supply market consensus.
 
+Users can star calendar events they want to watch and open a combined Starred view. Each star can carry a personal note and explicit Atlas project link, with upcoming stars visible on Dashboard and a separate browser-local backup/insert-only restore. A saved event needs its source and date; if it is no longer present in the live feed, show the saved date as an unverified snapshot rather than a current schedule. Alerts and cross-device sync are separate work.
+
+The first BLS calendar slice, prioritized while Coindar access is pending, uses FRED's public mirror for CPI, Employment Situation, JOLTS and PPI dates because direct BLS access is blocked from Atlas's server. Label the mirror and link to BLS for checking changes; leave reference periods, consensus, actuals and other releases unclaimed until sourced.
+
 ### Commodities, energy and cross-asset context (ATLAS-019/029/031)
 
 Core macro expansion: Brent/WTI, regional natural gas (Henry Hub, TTF, JKM), gold, silver, copper, nominal and real bond yields, dollar and broad stock benchmarks. Identify spot/futures instrument, units, region, observation time and delay; bond yields and bond prices are distinct. Energy/news shocks are context rather than automatic causal or directional claims about BTC.
@@ -643,3 +647,8 @@ Backup schema round trips, insert-only import, malformed data, identity/name col
 ### D-020 — Saved Discovery views delivered
 
 Discovery supports three explainable quick filters (BTC outperformers, weekly-leader pullbacks and high-volume gainers) plus named browser-local configurations retaining provider, mode, columns, search, ranges and sorting. Selecting a saved view restores its exact source; filtering uses existing snapshots and coverage. Current settings can be adjusted or saved as another view. See BACKLOG D-020 for thresholds and validation. Cloud preferences, saved watchlist-specific filters, column reordering and richer metrics remain separate work.
+
+
+### D-023 — First owned chart-plan delivery (2026-10-01)
+
+The first §19 chart-plan slice is delivered: seven explicit Binance USDT spot pairs, bounded closed candle snapshots, SMA/EMA/RSI and volume, editable time/price levels/trend segments/annotations, project associations, thesis/invalidation and separate browser-local backups. Full requirements remain broader: cloud sync, image export, navigation through larger histories and richer asset mappings are still open. See BACKLOG D-023 for precise validation and limits; external embeds do not supply Atlas geometry.

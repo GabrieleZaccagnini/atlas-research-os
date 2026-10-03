@@ -1,4 +1,4 @@
-export type ProviderId = 'coingecko' | 'dexscreener' | 'defillama' | 'coinpaprika' | 'fred' | 'alternative' | 'llama-stablecoins' | 'coindesk' | 'federalreserve' | 'coingecko-public' | 'coinmarketcap' | 'cointelegraph' | 'ecb';
+export type ProviderId = 'binance' | 'bea' | 'fomc-calendar' | 'fred-calendar' | 'coindar' | 'coingecko' | 'dexscreener' | 'defillama' | 'coinpaprika' | 'fred' | 'alternative' | 'llama-stablecoins' | 'coindesk' | 'federalreserve' | 'coingecko-public' | 'coinmarketcap' | 'cointelegraph' | 'ecb';
 export type ErrorCode = 'disabled' | 'missing_key' | 'rate_limited' | 'timeout' | 'network' | 'upstream' | 'invalid_response' | 'invalid_input';
 export interface ServiceError { code: ErrorCode; message: string; retryAt?: string }
 export interface Provenance {

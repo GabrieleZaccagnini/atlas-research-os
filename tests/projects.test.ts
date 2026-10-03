@@ -1,11 +1,11 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { newProject, filterProjects, projectFileSchema, projectSchema } from '../lib/projects';
+import { newProject, filterProjects, projectFileSchema, projectSchema, upcomingTokenProjects } from '../lib/projects';
 test('new records contain no fabricated holdings, prices or conviction', () => {
   const p = newProject(' Example ', 'test');
   assert.equal(p.name, 'Example'); assert.equal(p.symbol, 'TEST');
   assert.equal(p.cmcId, ''); assert.equal(p.status, 'Research Queue'); assert.equal(p.conviction, 'Unrated');
-  assert.equal(p.thesis, ''); assert.equal(projectSchema.safeParse(p).success, true);
+  assert.equal(p.thesis, ''); assert.equal(p.tokenLaunch.stage, 'Not tracked'); assert.equal(projectSchema.safeParse(p).success, true);
 });
 test('backup preserves Unicode and note text through JSON round trip', () => {
   const p = { ...newProject('Example', 'TEST'), thesis: 'Thesis: α → adoption\nSource: https://example.com', narratives: ['AI', 'Privacy'] };
@@ -31,7 +31,7 @@ test('project filters combine narrative/status and case-insensitive search', () 
 });
 
 test('legacy backups migrate without changing research or storage identity', () => {
-  const { details, ...legacy } = newProject('Legacy project', 'OLD');
+  const { details, tokenLaunch, ...legacy } = newProject('Legacy project', 'OLD');
   legacy.capital = 'Private round notes\nDo not lose this';
   const raw = { version: 1, projects: [legacy] };
   const parsed = projectFileSchema.parse(raw);
@@ -39,7 +39,21 @@ test('legacy backups migrate without changing research or storage identity', () 
   assert.equal(parsed.projects[0].capital, legacy.capital);
   assert.equal(parsed.projects[0].id, legacy.id);
   assert.deepEqual(parsed.projects[0].details, { links: [], team: [], funding: [], tokenomics: [] });
+  assert.deepEqual(parsed.projects[0].tokenLaunch, tokenLaunch);
   assert.equal('details' in raw.projects[0], false);
+  assert.equal('tokenLaunch' in raw.projects[0], false);
+});
+
+test('upcoming tokens support unknown tickers and tentative dates without provider mappings', () => {
+  const undated = { ...newProject('Early protocol', ''), tokenLaunch: { stage: 'Potential' as const, expectedOn: '', sourceUrl: 'https://example.com/announcement', reason: 'Interesting distribution design' } };
+  const dated = { ...newProject('Announced token', 'TBD'), tokenLaunch: { stage: 'Announced' as const, expectedOn: '2027-03-20', sourceUrl: '', reason: 'Watch tokenomics' } };
+  const live = { ...newProject('Live token', 'LIVE'), tokenLaunch: { stage: 'Live' as const, expectedOn: '', sourceUrl: '', reason: '' } };
+  const archived = { ...undated, id: crypto.randomUUID(), status: 'Archived' as const };
+  assert.equal(projectSchema.safeParse(undated).success, true);
+  assert.equal(projectSchema.safeParse({ ...dated, tokenLaunch: { ...dated.tokenLaunch, expectedOn: '2027-02-30' } }).success, false);
+  assert.equal(projectSchema.safeParse({ ...dated, tokenLaunch: { ...dated.tokenLaunch, sourceUrl: 'javascript:alert(1)' } }).success, false);
+  assert.deepEqual(upcomingTokenProjects([undated, live, archived, dated]), [dated, undated]);
+  assert.deepEqual(projectFileSchema.parse(JSON.parse(JSON.stringify({ version: 4, projects: [undated] }))).projects[0].tokenLaunch, undated.tokenLaunch);
 });
 
 import { newDetail } from '../lib/project-details';

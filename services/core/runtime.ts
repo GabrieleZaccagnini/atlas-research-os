@@ -4,6 +4,11 @@ import type { ServiceConfig } from './config';
 import { MemoryCache, type CacheStore } from './cache';
 import { ProviderError, safeError } from './errors';
 const origins: Record<ProviderId, string> = {
+  binance: 'https://data-api.binance.vision/',
+  bea: 'https://www.bea.gov/',
+  'fomc-calendar': 'https://www.federalreserve.gov/',
+  'fred-calendar': 'https://fred.stlouisfed.org/',
+  coindar: 'https://coindar.org/',
   coinmarketcap: 'https://pro-api.coinmarketcap.com/',
   cointelegraph: 'https://cointelegraph.com/',
   ecb: 'https://www.ecb.europa.eu/',
@@ -79,9 +84,10 @@ export class ProviderRuntime {
     const controller = new AbortController();
     const timer = setTimeout(() => controller.abort(), this.config.timeoutMs);
     try {
-      const headers: Record<string, string> = { Accept: format === 'text' ? 'text/csv, application/rss+xml, application/xml, text/xml' : 'application/json' };
+      const headers: Record<string, string> = { Accept: format === 'text' ? 'text/csv, application/rss+xml, application/xml, text/xml, text/html' : 'application/json' };
       if (['coingecko', 'coingecko-public'].includes(provider) && this.config.providers.coingecko.apiKey) headers['x-cg-demo-api-key'] = this.config.providers.coingecko.apiKey;
       if (provider === 'coinmarketcap' && this.config.providers.coinmarketcap.apiKey) headers['X-CMC_PRO_API_KEY'] = this.config.providers.coinmarketcap.apiKey;
+      if (provider === 'coindar' && this.config.providers.coindar.apiKey) url.searchParams.set('access_token', this.config.providers.coindar.apiKey);
       const response = await this.fetcher(url, { headers, signal: controller.signal, cache: 'no-store', redirect: 'error' });
       if (!response.ok) {
         if (response.status === 429) {

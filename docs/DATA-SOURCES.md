@@ -7,8 +7,8 @@ This preserves the final conversation map, including Exchange & Liquidity Intell
 | market | CoinMarketCap, CoinGecko, CoinStats, CoinPaprika | CMC top-100 ranked discovery and reference quotes; CoinPaprika wider discovery/personal quotes; CoinGecko when configured |
 | global | CoinMarketCap, CoinGecko, CoinPaprika | CMC global metrics, lazy CoinPaprika fallback; CoinGecko separately when configured |
 | sentiment | Alternative.me, CoinMarketCap, cryptocurrency.cv, LunarCrush, Santiment | CMC Crypto Fear & Greed and Altcoin Season; Alternative.me Bitcoin history separately |
-| candles | Mobula, Binance, CoinGecko | Planned |
-| charts | TradingView display; owned chart engine + permitted history later | External embeds on detail/Charts pages for crypto indices and explicit Binance spot pairs; no dashboard embeds; raw history/drawing persistence planned |
+| candles | Mobula, Binance, CoinGecko | D-023: bounded public Binance spot klines for seven explicit USDT pairs; 1h/4h/1d/1w closed snapshots |
+| charts | TradingView display; owned chart engine + permitted history later | External embeds on detail/Charts pages for crypto indices and explicit Binance spot pairs; no dashboard embeds; D-023 owned bounded candle snapshots and editable browser-local project plans |
 | technical | altFINS, Atlas | Planned |
 | dex | DexScreener, Mobula, CoinMarketCap DEX | DexScreener token pools |
 | projects | RootData, CoinMarketCap, CoinGecko, CoinPaprika, TokenInsight, Messari | CMC ID-based reference description/links/tags; CoinPaprika on-demand profile and reported team |
@@ -32,8 +32,8 @@ This preserves the final conversation map, including Exchange & Liquidity Intell
 | social | CMC mindshare access unverified; permitted X/Telegram, Reddit, Atlas news-volume, LunarCrush, Santiment | Planned |
 | search | CoinGecko trending searches, Google Trends (access conditional), manual | CoinGecko most-searched coins; not social/X trends |
 | developer | GitHub | Planned |
-| calendar | CoinMarketCal, Coindar, official/manual, RootData, news, Dropstab, CryptoRank | Manual dated project catalysts; automated feeds planned |
-| macroCalendar | Official calendars, manual, Finnhub, EODHD, Trading Economics (access to verify) | Planned |
+| calendar | CoinMarketCal, Coindar, official/manual, RootData, news, Dropstab, CryptoRank | Saved project catalysts, official BEA/FOMC dates and selected BLS dates via FRED; crypto feeds planned |
+| macroCalendar | Official calendars, FRED mirror, manual, Finnhub, EODHD, Trading Economics (access to verify) | BEA GDP/PCE/trade, FOMC meetings and BLS CPI/Employment/JOLTS/PPI via FRED; direct BLS access blocked |
 | macro | FRED/BEA, official central banks/statistical agencies, BIS, ECB, PBoC, BoJ, OECD, World Bank, Trading Economics; CME/Kalshi access to verify | FRED US nominal/real yields, fed funds, US M2, headline/core PCE, headline CPI and unemployment; global/expectations planned |
 | globalMarkets | FRED, Twelve Data, Alpha Vantage, TradingView | FRED daily VIX, broad USD index, S&P 500, WTI/Brent and Henry Hub spot gas observations |
 | geopolitics | Official government/foreign-ministry readouts and calendars, GDELT, sourced news/RSS, Stabilarity | Planned; meetings, agreements, developments and implementation tracked separately |
@@ -47,7 +47,7 @@ This preserves the final conversation map, including Exchange & Liquidity Intell
 | watchlists | Atlas database | Project statuses/Watchlist and Buy List views exist; distinct named lists and snapshot monitoring planned |
 | research | Atlas database | Manual project dossiers, evidence fields and private cloud persistence integration; CoinPaprika profile reference plus review history; broader enrichment planned |
 | alerts | Atlas | Planned |
-| cycle | Atlas, market data, Glassnode | Planned |
+| cycle | Atlas, Blockchain.com history; BlockHorizon display | BlockHorizon-hosted Cycle Index and selected chart embeds; Atlas-owned fitted/halving comparisons, scenarios, returns and mining views on Market Structure. Holder-cohort and ETF-flow series still need verified feeds. |
 | narratives | Atlas, DexScreener, news tagging, LunarCrush, Messari | Planned |
 | setups | Atlas, altFINS | Planned |
 | ai | future LLM API | Planned |
@@ -96,12 +96,20 @@ References: [FRED downloads](https://fredhelp.stlouisfed.org/fred/data/downloadi
 
 XML/CSV requests stay inside fixed server origins, refuse redirects, cap text at 2MB and reject XML DOCTYPE/entity declarations. RSS output keeps approved source-host HTTPS links only and is rendered as text. Each panel can fail independently. Visible-page polling is five minutes; endpoints reuse their longer caches. One bounded retry handles short local cooldowns; external long rate limits are respected. Cache/status remain process-local.
 
-Not connected: CoinGlass and detailed derivatives, X, global policy-rate coverage, global money composite, automated economic events and RWA access data. A direct BLS calendar-feed check returned HTTP 403 on this host; retain official external calendar links pending a permitted integration. CryptoCompare's news endpoint requested a key and was not used. CME, Kalshi and Investing.com are newly suggested candidates, not verified API integrations.
+Not connected: CoinGlass and detailed derivatives, X, global policy-rate coverage, global money composite, direct BLS and other economic event feeds, consensus/actuals and RWA access data. BEA and FOMC schedule dates are connected separately; selected BLS dates are mirrored by FRED (D-027). Direct BLS calendar/ICS requests returned HTTP 403 on this host, so retain its official verification link. CryptoCompare's news endpoint requested a key and was not used. CME, Kalshi and Investing.com are newly suggested candidates, not verified API integrations.
 
 
 ## Structure charts and recent candidate additions — 2026-09-28
 
 Market Structure (/market-cycle) and Research Charts (/charts) use official TradingView advanced-chart display embeds for TOTAL/TOTAL2/TOTAL3/OTHERS, BTC.D/ETH.D and Binance ETHBTC, with lazy loading, selected range, theme matching, expanded view and direct links. TOTAL is a top-125 index, separate from CoinPaprika's provider-wide aggregate; TOTAL2/3 retain stablecoins and OTHERS follows designated exclusions. TradingView controls data/symbol availability and notices. Frame load is a display transport state, not Atlas API health or proof of fresh observations. Atlas Refresh does not refresh these independently operated widgets.
+
+D-030/031 add BlockHorizon-hosted Cycle Index, MVRV Z-Score, Realized Price, PlanB composite, adjusted SOPR, Price Drawdown and Miner Revenue: Total (Daily) display embeds to Market Structure with provider links and an explicit blank-frame fallback link. No BlockHorizon raw data, account, key, server adapter or saved signal is used. NUPL is excluded because its provider embed preview reports it unsupported. The local in-app browser showed blank cross-origin frames for BlockHorizon and existing TradingView widgets; regular-browser rendering remains to verify. Frame loading does not establish observation freshness or Atlas API health.
+
+D-031 also links to Luxor's live Hashprice Index chart and explains that USD hashprice is expected gross mining revenue per PH/s/day, not net miner profit. Atlas does not embed or import Luxor data: the provider's published widget script currently resolves to a suspended CDN, and framing its full chart yielded a blank display locally. The chart remains available through a direct source link. No BTC-price/hashprice overlay or calculated margin is claimed.
+
+D-032 uses Blockchain.com's documented Charts API endpoints `hash-rate` and `market-price` for a native Market Structure comparison. The server requests seven-day rolling averages at 1Y, 3Y or All, aligns exact UTC dates, converts hash rate from TH/s to EH/s, and caches responses for six hours. The All range is reduced only after alignment, preserving the latest point; provider-side sampling can pick different dates across the two series and lose recent overlap. The endpoints returned live data without a key on 2026-10-03. Hash rate estimates network computing power from blocks and difficulty and is not hashprice, gross miner revenue or net miner profit. The Luxor hashprice link remains for that separate concept. Source: [Blockchain.com Charts API](https://www.blockchain.com/explorer/api/charts_api?show_adv=true), [hash-rate definition](https://www.blockchain.com/explorer/charts/hash-rate), [API terms](https://www.blockchain.com/legal/api-terms). Review API use and terms again before public or commercial distribution.
+
+D-033 extends the personal/local Market Structure page with independently calculated Bitcoin cycle views. `market-price` supports the fitted rainbow-style and power-law bands, halving-aligned price multiples, repeat/growth scenarios, and completed monthly/quarterly returns. `hash-rate` supplies the 30/60-day hash ribbons; `miners-revenue` supplies a daily gross-USD-revenue / trailing-365-day-average multiple. These requests use `timespan=all`, `sampled=false`, six-hour server caching, and UTC date alignment; the live endpoints returned thousands of positive daily values on 2026-10-04. The fit uses all available positive BTC prices from 2010-08-18, so historical bands change as new data is added. The repeat and growth paths are scenarios, not predictions. Realized price still uses BlockHorizon's existing hosted chart. No verified short-term-holder realized-price or ETF-flow feed is connected; those selectors show source-needed states rather than synthetic values. Bitbo links are references, not Bitbo data or embedded charts. Recheck Blockchain.com usage rights before wider/public deployment.
 
 This introduces no chart API key, no raw-history adapter and no drawing persistence. Project chart library, MA/RSI/volume calculations and AI annotation remain planned. See [official widget documentation](https://www.tradingview.com/widget-docs/widgets/charts/advanced-chart/) and [index definitions](https://www.tradingview.com/support/solutions/43000550480-where-do-i-find-crypto-market-capitalization-and-dominance/).
 
@@ -148,3 +156,20 @@ All share the existing 15-minute process-local cache, request coalescing, fixed 
 ### Named watchlist coverage (D-019)
 
 Named lists are Atlas browser-local records with exact CMC/Paprika/Gecko asset IDs; not an upstream account API. Prices reuse CMC top-100, CoinPaprika market snapshot and CoinGecko trending coverage, with source/freshness details and blank missing fields. No cross-provider symbol substitution or per-asset history request. Manual paste preview is available; CMC account/portfolio/curated-watchlist sync remains unconnected. Named-list backup v1 is separate from research backup v4.
+
+
+### Binance owned-chart slice — D-023 (2026-10-01)
+
+Official [market-data-only documentation](https://github.com/binance/binance-spot-api-docs/blob/master/faqs/market_data_only.md) identifies the public keyless origin and klines endpoint; [spot candle reference](https://developers.binance.com/en/docs/catalog/core-trading-spot-trading/api/rest-api/market) defines the tuple and timestamps. Atlas allowlists BTCUSDT, ETHUSDT, SOLUSDT, BNBUSDT, XRPUSDT, ADAUSDT and LINKUSDT; intervals 1h/4h/1d/1w, maximum 500 bars per request. Live BTC daily data was verified. This is USDT-quoted venue data, not a USD consolidated price or access to a user's exchange account. User project associations do not infer a cross-provider token mapping. Historical warehouse, arbitrary symbols and trading endpoints are unconnected.
+
+### Official calendar starter — D-024 (2026-10-01)
+
+[BEA's full news schedule](https://www.bea.gov/news/schedule/full) supplies GDP, Personal Income and Outlays/PCE, and U.S. international trade releases with published Eastern times. Atlas uses the live HTML schedule because BEA's downloadable JSON/ICS was stale when checked on 2026-10-01. [Federal Reserve FOMC calendars](https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm) supply meeting end dates and projection markers, but no exact decision time is inferred. Independent fixed-origin adapters use 6-hour and 24-hour process-local caches, respectively. [BLS's release calendar](https://www.bls.gov/schedule/) remains an external link because its feed returned HTTP 403 from this host. Calendar entries are scheduled dates, not reported data or forecasts; user-saved project catalysts stay separate.
+
+### Coindar prepared adapter — D-025 (2026-10-02)
+
+[Coindar API 2.0](https://coindar.org/en/api) documents account-token access to dated crypto events, coin IDs and tag IDs. Atlas has a disabled-by-default server adapter for a first page of 100 events over 90 days with 30-minute caching. The token is never sent to the browser; Coindar's API requires it in the upstream query URL. The public docs give mixed date precision (exact UTC time, day, month, quarter), which Atlas retains. A Coindar event-page URL and `source_reliable` flag are not the original project announcement or Atlas verification. The authenticated token request asks for Website, Application or Bot details, requires a Coindar backlink and restricts each token to one service/site; the Calendar links back to Coindar. No approved token, live response or published quota has been verified; therefore this is not a connected data source. Project identity mapping and complete catalog pagination remain separate work.
+
+### BLS dates via FRED calendar — D-027 (2026-10-02)
+
+[FRED's release calendar](https://fred.stlouisfed.org/releases/calendar?rid=10&y=2026) republishes scheduled dates for BLS [Consumer Price Index](https://fred.stlouisfed.org/releases/calendar?rid=10&y=2026), [Employment Situation](https://fred.stlouisfed.org/releases/calendar?rid=50&y=2026), [Job Openings and Labor Turnover Survey](https://fred.stlouisfed.org/releases/calendar?rid=192&y=2026) and [Producer Price Index](https://fred.stlouisfed.org/releases/calendar?rid=46&y=2026). FRED's year views specify US Central time; Atlas converts those times to UTC and shows Eastern/local display times. Only those four fixed release IDs for the current and next year are queried, with 24-hour process-local page caching and visible partial-failure warnings. FRED notes that release dates come from the data sources and may not match FRED data availability. The [BLS release calendar](https://www.bls.gov/schedule/) remains authoritative for schedule verification; Atlas's server still receives 403 from its HTML and ICS. Unpublished future-year pages are empty, not estimated. These records have no reference period, release values or consensus.
