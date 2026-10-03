@@ -35,7 +35,7 @@ The Charts entry under Research opens /charts: seven explicit Binance USDT spot 
 
 ## CMC, news and macro expansion — D-015
 
-CMC global totals are preferred, with an explicit CoinPaprika fallback. Discovery and personal quotes remain CoinPaprika. CMC Crypto Fear & Greed and Altcoin Season replace the empty breadth placeholder, with independent timestamps; Alternative.me Bitcoin history remains separately labeled on Market Structure. CMC reported derivatives volume is global; Binance BTCUSDT funding/OI is venue-specific. Liquidations and ETF flows remain missing. Outside-top-ten cap needs matching CMC rankings when global is CMC. All cap basket percentage histories remain planned.
+CMC global totals are preferred, with an explicit CoinPaprika fallback. Discovery and personal quotes remain CoinPaprika. CMC Crypto Fear & Greed and Altcoin Season replace the empty breadth placeholder, with independent timestamps; Alternative.me Bitcoin history remains separately labeled on Market Structure. CMC reported derivatives volume is global; Binance BTCUSDT funding/OI is venue-specific. The Derivatives detail page adds a browser-collected past-event liquidation map with visible coverage gaps; Coinalyze historical totals remain in missing-key state. Future liquidation estimates and ETF flows remain missing. Outside-top-ten cap needs matching CMC rankings when global is CMC. All cap basket percentage histories remain planned.
 
 FRED inflation values are calculated from exact prior month/year baselines; missing baselines stay unknown. Charts display the underlying price-index levels. Dates are observation periods, not release timestamps. No automatic regime/causal conclusion is generated.
 

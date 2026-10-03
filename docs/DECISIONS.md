@@ -207,3 +207,7 @@ The user asked for all eleven nominated Bitbo chart ideas and the three addition
 ## D-034 — Keep derivatives separate from market structure (2026-10-04)
 
 The user moved BTC derivatives ahead of comparison work and questioned its placement. Use a dedicated `/derivatives` page reached from the dashboard and sidebar: funding and open interest describe perpetual leverage and positioning, while Market Structure continues to cover cap, dominance and cycle context. Begin with verified key-free Binance BTCUSDT observations so the page works without a new account. Label venue/contract and BTC versus USDT units; do not imply actual liquidations or market-wide coverage. Revisit CryptoQuant or another source when an actual liquidation dataset or wider coverage justifies access.
+
+## D-035 — Show observed liquidations and historical totals separately (2026-10-04)
+
+The user approved using both Coinalyze and Binance for liquidation context while looking for future heatmap APIs. Use the free Binance BTCUSDT stream for a browser-collected map of past forced-order execution prices and visibly mark connected periods. It is sampled and has no backfill; a local browser tab cannot provide complete market history. Use Coinalyze's hourly long/short totals as a separate historical chart after a server-only free API key is configured and its exact market mapping succeeds. These time-bucket totals have no execution-price coordinates, so never pour them into heatmap cells. Keep modeled future liquidation clusters as a separate later source/feature.

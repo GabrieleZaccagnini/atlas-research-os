@@ -11,8 +11,11 @@ Routes are GET, server-side, dynamic and read-only. The shared service routes us
 | `/api/data/defi?limit=50` | integer 1–100 | protocols ranked by reported TVL |
 | `/api/data/status` | none | process-local status for implemented providers |
 | `/api/data/btc-derivatives` | none; fixed Binance BTCUSDT perpetual | current BTC open interest, daily BTC/USDT-valued OI history, settled funding history, partial availability |
+| `/api/data/coinalyze-liquidations` | none; fixed Binance BTCUSDT perpetual | hourly Coinalyze long/short liquidation totals converted to USD, up to 30 days; missing-key until configured |
 
 The BTC derivatives route is a later standalone read-only route with its own fixed response shape (not the shared `ServiceResult` envelope). It uses Binance's public USDⓈ-M endpoints, a five-minute upstream cache and a browser cache hint. It needs no API key. `unavailable` names individual failed series; all three failing returns HTTP 502. Open-interest history is limited by Binance to the latest month. Its USDT value and current BTC quantity are separate units; funding values are decimal rates per settlement, displayed as percentages by the client.
+
+The Coinalyze route uses `COINALYZE_API_KEY` only in a server-side header. Without it, HTTP 503 returns `missing_key`; no upstream call is made. With a key, a cached `future-markets` lookup must confirm `BTCUSDT_PERP.A` is a Binance BTC/USDT perpetual before the fixed `liquidation-history` call. The latter requests 30 days of closed hourly buckets with `convert_to_usd=true`, caches upstream for one hour, validates the exact response symbol and finite nonnegative values, and returns a standalone `{ source, symbol, interval, unit, fetchedAt, points }` shape. A live authenticated response remains unverified until the key is configured.
 
 Success: `{ ok: true, data, meta: { provider, fetchedAt, expiresAt, cache } }`.
 Stale success includes `warning` and keeps the original fetch time. `sourceUpdatedAt`, where available, is the provider's time, not Atlas's fetch time. Successful empty arrays mean no returned results; they are not provider failures.
