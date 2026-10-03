@@ -1,6 +1,6 @@
 # Atlas data API
 
-All routes are GET, server-side, dynamic, read-only, with `Cache-Control: no-store` for browser responses. Provider caching is handled inside the service layer. The Projects Markets & Liquidity panel calls these routes on demand, and Data Sources reads status. Legacy preview pages still use example data.
+Routes are GET, server-side, dynamic and read-only. The shared service routes use `Cache-Control: no-store` for browser responses and provider caching inside the service layer; later standalone chart routes can set their own cache headers as documented below. The Projects Markets & Liquidity panel calls the shared routes on demand, and Data Sources reads status. Legacy preview pages still use example data.
 
 | Route | Input | Result |
 |---|---|---|
@@ -10,6 +10,9 @@ All routes are GET, server-side, dynamic, read-only, with `Cache-Control: no-sto
 | `/api/data/dex?chain=ethereum&address=0x...` | required chain/address | returned pools, base price, reserves, liquidity, transactions |
 | `/api/data/defi?limit=50` | integer 1–100 | protocols ranked by reported TVL |
 | `/api/data/status` | none | process-local status for implemented providers |
+| `/api/data/btc-derivatives` | none; fixed Binance BTCUSDT perpetual | current BTC open interest, daily BTC/USDT-valued OI history, settled funding history, partial availability |
+
+The BTC derivatives route is a later standalone read-only route with its own fixed response shape (not the shared `ServiceResult` envelope). It uses Binance's public USDⓈ-M endpoints, a five-minute upstream cache and a browser cache hint. It needs no API key. `unavailable` names individual failed series; all three failing returns HTTP 502. Open-interest history is limited by Binance to the latest month. Its USDT value and current BTC quantity are separate units; funding values are decimal rates per settlement, displayed as percentages by the client.
 
 Success: `{ ok: true, data, meta: { provider, fetchedAt, expiresAt, cache } }`.
 Stale success includes `warning` and keeps the original fetch time. `sourceUpdatedAt`, where available, is the provider's time, not Atlas's fetch time. Successful empty arrays mean no returned results; they are not provider failures.

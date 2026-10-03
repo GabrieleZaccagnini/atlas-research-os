@@ -55,6 +55,8 @@ D-030/031 use fixed BlockHorizon iframe URLs in `components/dashboard/blockhoriz
 
 D-033 adds `app/api/data/bitcoin-cycle/route.ts` and pure calculations in `lib/bitcoin-cycle.ts`. The route requests unsampled Blockchain.com history for BTC price and, only for the selected mining view, hash rate or miner revenue. It caches upstream responses for six hours, aligns by UTC date, and returns calculated rows. `components/dashboard/bitcoin-cycle-lab.tsx` renders one selected chart/table, keeps scenario inputs in component state, and labels derived models and missing provider coverage. It does not persist raw history, forecasts or user input. BlockHorizon remains a separate third-party display.
 
+D-034 adds `/derivatives` and a Dashboard summary. The fixed, key-free Binance USDⓈ-M BTCUSDT requests in `app/api/data/btc-derivatives/route.ts` fetch current open interest, 30 daily open-interest observations and 90 settled funding observations. `lib/btc-derivatives.ts` validates contract identity, numeric units and timestamps. Each endpoint fails independently; the route errors only if all three fail. A five-minute upstream cache bounds repeat calls, while the UI refreshes when visible and labels partial data. No cross-venue aggregation or liquidation estimates are calculated.
+
 The shared next-themes provider applies CSS theme tokens and a browser-only UI preference; it does not alter saved project schemas. Existing manual positions/research/export compatibility remain unchanged. Onchain dashboard tabs mount only their selected summary pair; existing server caches and detail views are reused.
 
 

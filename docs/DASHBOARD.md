@@ -18,7 +18,7 @@ Still to connect: X/social metrics, funding/open interest/liquidations, global p
 
 ## Grouped layout and theme — 2026-09-28
 
-Market status combines six compact market values; sentiment/breadth sits alongside it. A compact structure snapshot follows; full-width Discovery is the main central section, then macro/trending/derivatives, personal positions/watchlist, news/calendar and onchain sections. Onchain switches between TVL/stablecoins and volume/revenue so the homepage does not need four separate large panels at once. Detail pages retain broader views. Derivatives/ETF flow placeholders remain explicitly unconnected.
+Market status combines six compact market values; sentiment/breadth sits alongside it. A compact structure snapshot follows; full-width Discovery is the main central section, then macro/trending/derivatives, personal positions/watchlist, news/calendar and onchain sections. Onchain switches between TVL/stablecoins and volume/revenue so the homepage does not need four separate large panels at once. Detail pages retain broader views. The derivatives card shows Binance BTCUSDT open interest and settled funding beside the separate CMC global volume observation, and opens `/derivatives`; liquidations and ETF flows remain unconnected.
 
 Use the sun/moon control in the top bar for light/dark themes. The preference is stored in this browser separately from research and account records. The existing sidebar collapse preference remains independent.
 
@@ -35,7 +35,7 @@ The Charts entry under Research opens /charts: seven explicit Binance USDT spot 
 
 ## CMC, news and macro expansion — D-015
 
-CMC global totals are preferred, with an explicit CoinPaprika fallback. Discovery and personal quotes remain CoinPaprika. CMC Crypto Fear & Greed and Altcoin Season replace the empty breadth placeholder, with independent timestamps; Alternative.me Bitcoin history remains separately labeled on Market Structure. CMC reported derivatives volume is available; funding/OI/liquidations/ETF flows remain missing. Outside-top-ten cap needs matching CMC rankings when global is CMC. All cap basket percentage histories remain planned.
+CMC global totals are preferred, with an explicit CoinPaprika fallback. Discovery and personal quotes remain CoinPaprika. CMC Crypto Fear & Greed and Altcoin Season replace the empty breadth placeholder, with independent timestamps; Alternative.me Bitcoin history remains separately labeled on Market Structure. CMC reported derivatives volume is global; Binance BTCUSDT funding/OI is venue-specific. Liquidations and ETF flows remain missing. Outside-top-ten cap needs matching CMC rankings when global is CMC. All cap basket percentage histories remain planned.
 
 FRED inflation values are calculated from exact prior month/year baselines; missing baselines stay unknown. Charts display the underlying price-index levels. Dates are observation periods, not release timestamps. No automatic regime/causal conclusion is generated.
 

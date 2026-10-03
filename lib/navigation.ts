@@ -8,6 +8,7 @@ export const navigation = [
   { label: 'Intelligence', items: [
     { label: 'Macro & Markets', href: '/macro', icon: 'Globe' },
     { label: 'Market Structure', href: '/market-cycle', icon: 'Repeat' },
+    { label: 'Derivatives', href: '/derivatives', icon: 'Activity' },
     { label: 'Chains & Liquidity', href: '/chains', icon: 'Layers' },
     { label: 'News', href: '/news', icon: 'Newspaper' },
     { label: 'Calendar', href: '/calendar', icon: 'CalendarDays' },

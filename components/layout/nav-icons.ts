@@ -15,7 +15,7 @@ import {
   Settings,
   Database,
   BadgeCheck,
-  BarChart3, Wallet, Layers, CandlestickChart, Bookmark,
+  BarChart3, Wallet, Layers, CandlestickChart, Bookmark, Activity,
 } from 'lucide-react';
 
 export const navIconMap: Record<string, React.ComponentType<{ className?: string }>> = {
@@ -33,5 +33,5 @@ export const navIconMap: Record<string, React.ComponentType<{ className?: string
   Settings,
   Database,
   BadgeCheck,
-  BarChart3, Wallet, Layers, CandlestickChart, Bookmark,
+  BarChart3, Wallet, Layers, CandlestickChart, Bookmark, Activity,
 };
