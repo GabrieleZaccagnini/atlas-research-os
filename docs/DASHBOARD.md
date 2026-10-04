@@ -37,6 +37,8 @@ The Charts entry under Research opens /charts: seven explicit Binance USDT spot 
 
 CMC global totals are preferred, with an explicit CoinPaprika fallback. Discovery and personal quotes remain CoinPaprika. CMC Crypto Fear & Greed and Altcoin Season replace the empty breadth placeholder, with independent timestamps; Alternative.me Bitcoin history remains separately labeled on Market Structure. CMC reported derivatives volume is global; Binance BTCUSDT funding/OI is venue-specific. The Derivatives detail page has a browser-collected past-event map with coverage gaps, MarginPad's sampled multi-venue observed price profile and separately labeled modeled future levels; Coinalyze historical hourly totals are connected with a local server-side key. Market Structure adds delayed BGeometrics short-term-holder realized price, daily ETF net BTC flows and hashprice history. ETF flow versus issuance remains planned. Outside-top-ten cap needs matching CMC rankings when global is CMC. All cap basket percentage histories remain planned.
 
+D-038 adds a Binance-only BTCUSDT spot-versus-perpetual traded-volume card on the Derivatives detail page. Its 24h/7d/30d selectors use matched closed hourly USDT quote volume, show coverage and a spot/perp ratio, and avoid assigning buy/sell direction or price causality. The Dashboard summary still has its separate CMC global derivatives volume observation.
+
 FRED inflation values are calculated from exact prior month/year baselines; missing baselines stay unknown. Charts display the underlying price-index levels. Dates are observation periods, not release timestamps. No automatic regime/causal conclusion is generated.
 
 

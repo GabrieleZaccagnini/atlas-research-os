@@ -113,7 +113,7 @@ These are planned capabilities unless explicitly listed as implemented below.
 | 11 | Taken vs skipped | Record signals at decision time; compare consistent hypothetical outcomes with actual trades and costs |
 | 12 | Volatility compression | Bollinger/Keltner, ATR and compression observations with explicit parameters |
 | 13 | Stablecoin liquidity | Supply, issuance/redemption, bridges and exchange flows, with observed coverage |
-| 14 | Derivatives/liquidation context | Funding, open interest, actual liquidation feeds and explicitly labeled modeled heatmaps |
+| 14 | Derivatives/liquidation context | Funding, open interest, actual liquidation feeds, explicitly labeled modeled heatmaps and aligned spot/perpetual traded-volume context |
 | 15 | Protocol economics | Fees, protocol revenue, token-holder revenue, yields and clearly defined valuation multiples |
 | 16 | Regulation | Dated jurisdiction/project developments with primary sources and nuanced risk notes |
 | 17 | Global central banks | Fed, ECB, PBoC, BoJ, BoE and other relevant policy/calendar series; scenario interpretation |
@@ -176,6 +176,7 @@ The Gemini document contains product ideas mixed with unverified factual and API
 - Attention/source coverage, setup counts and heuristic scores are not calibrated success probabilities. Missing feeds must not silently inflate a score.
 - OI and funding alone cannot locate exact liquidation prices. Use observed datasets or label assumptions and uncertainty.
 - A new open perpetual contract has both a long and a short; OI direction cannot identify the initiating side. Funding sign is a cost/pressure observation, not a proven entry or exit. Exchange funding intervals and baseline components can change. Estimated liquidation bands are relative model outputs, not exact orders or reliable price targets. Do not infer spot-led buying without aligned spot and futures data.
+- Even aligned spot/perpetual traded quote volume from one venue measures activity, not net buying or price leadership. Taker-side direction, venue coverage, prices and timestamps require separate validation before interpretation.
 - Peer-market-cap scenarios are hypothetical, supply-sensitive calculations, not fair-value forecasts. Disclosed sale-price multiples are not known investor cost bases or realized profits.
 - Protocol revenue, fees and token-holder distributions are different. Stablecoin supply changes are not automatically exchange buying pressure. Transactions to an exchange do not prove a sale.
 - Governance-only does not prove zero economic value; treasury size, TVL floors, low volatility and country labels do not establish safety.
