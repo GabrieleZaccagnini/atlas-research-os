@@ -175,6 +175,7 @@ The Gemini document contains product ideas mixed with unverified factual and API
 - Verify endpoint availability, permissions, quotas and prices at integration time. Do not assume one CMC credit per arbitrary batch, unlimited free OHLCV, or that market-chart series are exchange OHLCV.
 - Attention/source coverage, setup counts and heuristic scores are not calibrated success probabilities. Missing feeds must not silently inflate a score.
 - OI and funding alone cannot locate exact liquidation prices. Use observed datasets or label assumptions and uncertainty.
+- A new open perpetual contract has both a long and a short; OI direction cannot identify the initiating side. Funding sign is a cost/pressure observation, not a proven entry or exit. Exchange funding intervals and baseline components can change. Estimated liquidation bands are relative model outputs, not exact orders or reliable price targets. Do not infer spot-led buying without aligned spot and futures data.
 - Peer-market-cap scenarios are hypothetical, supply-sensitive calculations, not fair-value forecasts. Disclosed sale-price multiples are not known investor cost bases or realized profits.
 - Protocol revenue, fees and token-holder distributions are different. Stablecoin supply changes are not automatically exchange buying pressure. Transactions to an exchange do not prove a sale.
 - Governance-only does not prove zero economic value; treasury size, TVL floors, low volatility and country labels do not establish safety.

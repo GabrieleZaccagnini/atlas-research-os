@@ -35,6 +35,8 @@ The user's request for a usable morning workflow moved a narrow M2 slice forward
 
 **Provider shortlist from the 2026-10-02 tab review:** Binance public BTCUSDT perpetual funding/OI now covers the first derivatives slice without a key. CryptoQuant Basic remains a candidate for actual liquidation data and broader BTC coverage after account access, terms and endpoint samples are verified. TokenInsight's free profile/rating fields remain a project-research candidate. Nansen's free balance floor supports occasional on-demand wallet or token-flow checks. CryptoRank Sandbox can enrich a known project's profile, but its free launchpad endpoint is only an ID/name directory and cannot populate upcoming sales; funding/unlock feeds are paid. If a specific funding/unlock gap remains, compare DropsTab's exact endpoint/tier and sample coverage with CryptoRank Advanced/Pro before paying. CoinAPI and MMT should answer a demonstrated venue/history/order-flow gap. [PROVIDER-RESEARCH.md](PROVIDER-RESEARCH.md) records all 18 leads and their access boundaries; the earlier planning review did not connect them.
 
+**D-037 research workflow:** Derivatives now has a qualitative OI/funding/liquidation reading guide, and the existing Research Library has quick note starters and matching focus filters. A spot-versus-perpetual volume comparison requires aligned, verified source data; automatic squeeze calls and hard trading rules are not part of this slice.
+
 ## How each slice is built
 
 1. Specify the question the screen answers, a small acceptance checklist and representative missing/error cases.
